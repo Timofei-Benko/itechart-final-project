@@ -13,27 +13,28 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: true,
+        unique: true,
     },
-    password: {
+    passwordHash: {
         type: String,
         required: true,
     },
-    // username: {
-    //     type: String,
-    //     required: false,
-    // },
-    // position: {
-    //     type: String,
-    //     required: false,
-    // },
-    // experience: {
-    //     type: Number,
-    //     required: false,
-    // },
-    // languages: {
-    //     type: Array,
-    //     required: false
-    // },
+    username: {
+        type: String,
+        required: false,
+    },
+    position: {
+        type: String,
+        required: false,
+    },
+    experience: {
+        type: Number,
+        required: false,
+    },
+    languages: {
+        type: Array,
+        required: false
+    },
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
