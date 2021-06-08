@@ -94,7 +94,7 @@ router.route('/signin').post(async (req, res, next) => {
 
 router.route('/:userId').get(validateSession, async (req, res, next) => {
     try {
-        const { userId } = req.params;
+        const { userId }: { userId: string } = req.params;
 
         if (await userService.exists({ _id: userId })) {
             const user: IUser & { _id: string} = await userService.getOne({ _id: userId });
@@ -107,7 +107,7 @@ router.route('/:userId').get(validateSession, async (req, res, next) => {
     }
 });
 
-router.route('/:userId').delete(async (req, res, next) => {
+router.route('/:userId').delete(validateSession, async (req, res, next) => {
     try {
         const userId: string = req.params.userId;
 
