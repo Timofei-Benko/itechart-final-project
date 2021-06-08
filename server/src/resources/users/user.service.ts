@@ -46,7 +46,7 @@ const create = async (userData: IUser): Promise<void> => {
     await user.save();
 }
 
-const getOne = async (filter: object): Promise<IUser> => User.findOne(filter).exec();
+const getOne = async (filter: object): Promise<IUser & { _id: string }> => User.findOne(filter).exec();
 
 const deleteOneById = async (filter: object): Promise<void> => User.findByIdAndDelete(filter);
 
