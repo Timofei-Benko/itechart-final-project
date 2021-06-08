@@ -23,6 +23,13 @@ const getSafeResponse = (reqBody: IUser): Partial<IUser> => {
     };
 };
 
+const isValidPassword = (password: string): boolean => password.length > 4;
+
+const isValidEmail = (email: string): boolean => {
+    const REG_EXP: RegExp = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    return REG_EXP.test(email);
+};
+
 const exists = async (filter: object): Promise<boolean> => User.exists(filter);
 
 const create = async (userData: IUser): Promise<void> => {
@@ -39,12 +46,14 @@ const create = async (userData: IUser): Promise<void> => {
     await user.save();
 }
 
-const getOne = async (filter: object): Promise<IUser> => User.findOne({ filter }).exec();
+const getOne = async (filter: object): Promise<IUser> => User.findOne(filter).exec();
 
-const deleteOneById = async (userId: string): Promise<void> => User.findByIdAndDelete({_id: userId});
+const deleteOneById = async (filter: object): Promise<void> => User.findByIdAndDelete(filter);
 
 module.exports = {
     getSafeResponse,
+    isValidPassword,
+    isValidEmail,
     exists,
     create,
     deleteOneById,
