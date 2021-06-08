@@ -1,8 +1,11 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET_KEY: string = require('../../common/config').toString();
 
 import IUser = require('./user.interface');
 const userService = require('./user.service');
+const validateSession = require('../../middleware/validate.session');
 
 router.route('/signup').post(async (req, res, next) => {
     try {
@@ -18,10 +21,18 @@ router.route('/signup').post(async (req, res, next) => {
         }: IUser = req.body.user;
 
         if (await userService.exists({ email })) {
-            return res.status(409).json({error: 'User already exists'});
+            return res.status(409).json({ error: 'User already exists' });
         }
 
-        const userData = {
+        if (!await userService.isValidEmail(email)) {
+            return res.status(422).json({ error: 'Email format is incorrect' });
+        }
+
+        if (!await userService.isValidPassword(password)) {
+            return res.status(422).json({ error: 'Password must be longer than 4 characters' })
+        }
+
+        const userData: Partial<IUser> = {
             firstName,
             lastName,
             email,
@@ -37,7 +48,7 @@ router.route('/signup').post(async (req, res, next) => {
         res.status(201).json(
             {
                 status: 'User created',
-                userData: userService.getSafeResponse(req.body.user),
+                user: userService.getSafeResponse(req.body.user),
             }
         );
     } catch (e) {
@@ -50,15 +61,47 @@ router.route('/signin').post(async (req, res, next) => {
         const { email, password }: { email: string, password: string } = req.body.user;
 
         if (!await userService.exists({ email })) {
-            return res.status(404).json({error: 'User not found'});
+            return res.status(404).json({ error: 'User with the provided email is not found' });
         }
 
-        const user = await userService.getOne(email);
+        const user: IUser & { _id: string } = await userService.getOne({ email });
 
-        console.log(user, password)
+        bcrypt.compare(password, user.passwordHash, (err, matches) => {
+            if (err) return res.status(401).json({ error: 'Authentication failed' });
 
-        // bcrypt.compare(password)
+            if (matches) {
+                const token: string = jwt.sign({
+                    id: user._id,
+                    email: user.email,
+                },
+                    JWT_SECRET_KEY,
+                    {
+                        expiresIn: '1h',
+                    }
+                )
+                return res.status(200).json({
+                    status: 'Signed in successfully',
+                    token,
+                });
+            } else {
+                return res.status(401).json({ error: 'Password is incorrect' });
+            }
+        });
+    } catch (e) {
+        next(e);
+    }
+});
 
+router.route('/:userId').get(validateSession, async (req, res, next) => {
+    try {
+        const { userId } = req.params;
+
+        if (await userService.exists({ _id: userId })) {
+            const user: IUser & { _id: string} = await userService.getOne({ _id: userId });
+            return res.status(200).json({ _id: user._id, ...await userService.getSafeResponse(user) });
+        } else {
+            return res.status(404).json({ error: 'User doesn\'t exist' });
+        }
     } catch (e) {
         next(e);
     }
@@ -67,10 +110,9 @@ router.route('/signin').post(async (req, res, next) => {
 router.route('/:userId').delete(async (req, res, next) => {
     try {
         const userId: string = req.params.userId;
-        console.log(userId);
 
-        if (await userService.exists(userId)) {
-            await userService.deleteOneById(userId);
+        if (await userService.exists({ _id: userId })) {
+            await userService.deleteOneById({ _id: userId });
             return res.status(200).json({ status: 'User deleted' })
         } else {
             return res.status(404).json({ error: 'User doesn\'t exist' });
