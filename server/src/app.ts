@@ -2,6 +2,7 @@ const express = require('express');
 const morganBody = require('morgan-body');
 const app = express();
 const userRouter = require('./resources/users/user.router');
+const questionRouter = require('./resources/questions/question.router');
 const createDBConnection = require('./db');
 
 app.use(express.json());
@@ -18,6 +19,7 @@ app.use('/api', (req, res, next) => {
     next();
 });
 
-app.use('/api/users', userRouter);
+app.use('/api', userRouter);
+app.use('/api', questionRouter);
 
 export = app;
