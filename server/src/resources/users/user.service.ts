@@ -50,7 +50,7 @@ const getOne = async (filter: object): Promise<IUser & { _id: string }> => User.
 
 const deleteOneById = async (filter: object): Promise<void> => User.findByIdAndDelete(filter);
 
-module.exports = {
+export = {
     getSafeResponse,
     isValidPassword,
     isValidEmail,
@@ -58,4 +58,4 @@ module.exports = {
     create,
     deleteOneById,
     getOne,
-}
+};
