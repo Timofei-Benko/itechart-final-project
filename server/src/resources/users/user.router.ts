@@ -7,7 +7,7 @@ import IUser = require('./user.interface');
 const userService = require('./user.service');
 const validateSession = require('../../middleware/validate.session');
 
-router.route('/signup').post(async (req, res, next) => {
+router.route('/auth/signup').post(async (req, res, next) => {
     try {
         const {
             firstName,
@@ -19,19 +19,15 @@ router.route('/signup').post(async (req, res, next) => {
             experience,
             languages
         }: IUser = req.body.user;
-
         if (await userService.exists({ email })) {
             return res.status(409).json({ error: 'User already exists' });
         }
-
         if (!await userService.isValidEmail(email)) {
             return res.status(422).json({ error: 'Email format is incorrect' });
         }
-
         if (!await userService.isValidPassword(password)) {
             return res.status(422).json({ error: 'Password must be longer than 4 characters' })
         }
-
         const userData: Partial<IUser> = {
             firstName,
             lastName,
@@ -42,9 +38,7 @@ router.route('/signup').post(async (req, res, next) => {
             experience,
             languages
         };
-
         await userService.create(userData);
-
         res.status(201).json(
             {
                 status: 'User created',
@@ -56,19 +50,15 @@ router.route('/signup').post(async (req, res, next) => {
     }
 });
 
-router.route('/signin').post(async (req, res, next) => {
+router.route('/auth/signin').post(async (req, res, next) => {
     try {
         const { email, password }: { email: string, password: string } = req.body.user;
-
         if (!await userService.exists({ email })) {
             return res.status(404).json({ error: 'User with the provided email is not found' });
         }
-
         const user: IUser & { _id: string } = await userService.getOne({ email });
-
         bcrypt.compare(password, user.passwordHash, (err, matches) => {
             if (err) return res.status(401).json({ error: 'Authentication failed' });
-
             if (matches) {
                 const token: string = jwt.sign({
                     id: user._id,
@@ -92,13 +82,12 @@ router.route('/signin').post(async (req, res, next) => {
     }
 });
 
-router.route('/:userId').get(validateSession, async (req, res, next) => {
+router.route('/users/:userId').get(validateSession, async (req, res, next) => {
     try {
         const { userId }: { userId: string } = req.params;
-
         if (await userService.exists({ _id: userId })) {
             const user: IUser & { _id: string} = await userService.getOne({ _id: userId });
-            return res.status(200).json({ _id: user._id, ...await userService.getSafeResponse(user) });
+            return res.status(200).json({ user: { _id: user._id, ...await userService.getSafeResponse(user) }});
         } else {
             return res.status(404).json({ error: 'User doesn\'t exist' });
         }
@@ -107,10 +96,9 @@ router.route('/:userId').get(validateSession, async (req, res, next) => {
     }
 });
 
-router.route('/:userId').delete(validateSession, async (req, res, next) => {
+router.route('/users/:userId').delete(validateSession, async (req, res, next) => {
     try {
         const userId: string = req.params.userId;
-
         if (await userService.exists({ _id: userId })) {
             await userService.deleteOneById({ _id: userId });
             return res.status(200).json({ status: 'User deleted' })
