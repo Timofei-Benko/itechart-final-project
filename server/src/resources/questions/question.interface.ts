@@ -1,11 +1,11 @@
-import mongoose = require('mongoose');
+import IAnswer = require('./answer.interface');
 
 interface IQuestion {
     _id?: string;
-    userId: string;
+    user: string;
     title: string;
     content: string;
-    answers?: Array<typeof mongoose.Schema>;
+    answers?: Array<IAnswer>;
 }
 
 export = IQuestion;
