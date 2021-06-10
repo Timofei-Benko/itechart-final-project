@@ -6,10 +6,6 @@ const questionSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User',
     },
-    date: {
-        type: Date,
-        default: new Date().toLocaleDateString(),
-    },
     title: {
         type: String,
         required: true,
@@ -18,32 +14,26 @@ const questionSchema = new Schema({
         type: String,
         required: true,
     },
-    // answers: {
-    //     required: false,
-    //     type: [{
-    //         user: {
-    //             type: Schema.Types.ObjectId,
-    //             ref: 'User',
-    //         },
-    //         date: {
-    //             type: Date,
-    //             default: new Date().toLocaleDateString(),
-    //         },
-    //         score: {
-    //             type: Number,
-    //             required: true,
-    //             default: 0,
-    //         },
-    //         isBest: {
-    //           type: Boolean,
-    //           default: false,
-    //         },
-    //         content: {
-    //             type: String,
-    //             required: true,
-    //         }
-    //     }],
-    // },
+    answers: {
+        required: true,
+        type: [{
+            user: {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+            score: {
+                type: Number,
+                default: 0,
+            },
+            isBest: {
+              type: Boolean,
+              default: false,
+            },
+            content: {
+                type: String,
+            }
+        }],
+    },
 }, { typePojoToMixed: false, timestamps: true, });
 
 const Question = mongoose.model('Question', questionSchema);
