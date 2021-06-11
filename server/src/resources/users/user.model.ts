@@ -35,6 +35,22 @@ const userSchema = new Schema({
         type: Array,
         required: false
     },
+    questionQty: {
+        type: Number,
+        default: 0,
+    },
+    answerQty: {
+        type: Number,
+        default: 0,
+    },
+    likedAnswerQty: {
+        type: Number,
+        default: 0,
+    },
+    bestAnswerQty: {
+        type: Number,
+        default: 0,
+    },
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
