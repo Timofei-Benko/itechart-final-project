@@ -38,11 +38,11 @@ router.route('/auth/signup').post(async (req, res, next) => {
             experience,
             languages
         };
-        await userService.create(userData);
+        const user = await userService.create(userData);
         res.status(201).json(
             {
                 status: 'User created',
-                user: userService.getSafeResponse(req.body.user),
+                user: userService.getSafeResponse(user),
             }
         );
     } catch (e) {
@@ -95,6 +95,18 @@ router.route('/users/:userId').get(validateSession, async (req, res, next) => {
         next(e);
     }
 });
+
+// router.route('/users/:userId').put(async (req, res, next) => {
+//     try {
+//         const { userId }: { userId: string } = req.params;
+//         if (!await userService.exists({ _id: userId })) {
+//             return res.status(404).json({ error: 'User doesn\'t exist' });
+//         }
+//
+//     } catch (e) {
+//         next(e);
+//     }
+// });
 
 router.route('/users/:userId').delete(validateSession, async (req, res, next) => {
     try {
