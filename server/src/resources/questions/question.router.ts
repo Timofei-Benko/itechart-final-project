@@ -5,9 +5,18 @@ const questionService = require('./question.service');
 import userService = require('../users/user.service');
 import validateSession = require('../../middleware/validate.session');
 
+router.route('/questions').get(async (_req, res, next) => {
+    try {
+        const questions = await questionService.getAll();
+        return res.status(200).json({ questions: questions });
+    } catch (e) {
+        next(e);
+    }
+});
+
 router.route('/questions').post(validateSession, async (req, res, next) => {
     try {
-        const { user }: { user: string } = req.body.question;
+        const { user: user }: { user: string } = req.body.question;
         if (!await userService.exists({ _id: user })) {
             return res.status(404).json({error: 'User doesn\'t exist'});
         }
@@ -18,14 +27,14 @@ router.route('/questions').post(validateSession, async (req, res, next) => {
     }
 });
 
-router.route('questions/:questionId').delete(validateSession, async (req, res, next) => {
+router.route('users/:userId/questions').get(validateSession, async (req, res, next) => {
     try {
-        const { questionId }: { questionId: string } = req.params;
-        if (!await questionService.exists({ _id: questionId })) {
-            return res.status(404).json({ error: 'Question doesn\'t exist' });
+        const { userId }: { userId: string } = req.params;
+        if (!await userService.exists({ _id: userId })) {
+            return res.status(404).json({ error: 'User doesn\'t exist' });
         }
-        await questionService.deleteOneById();
-        return res.status(200).json({ status: 'Question deleted' });
+        const questions = await questionService.getAllUserQuestions({ user: userId });
+        return res.status(200).json({ questions: questions });
     } catch (e) {
         next(e);
     }
@@ -39,6 +48,19 @@ router.route('/questions/:questionId').get(async (req, res, next) => {
         }
         const question: IQuestion = await questionService.getOneById({ _id: questionId });
         return res.status(200).json({ question: question});
+    } catch (e) {
+        next(e);
+    }
+});
+
+router.route('questions/:questionId').delete(validateSession, async (req, res, next) => {
+    try {
+        const { questionId }: { questionId: string } = req.params;
+        if (!await questionService.exists({ _id: questionId })) {
+            return res.status(404).json({ error: 'Question doesn\'t exist' });
+        }
+        await questionService.deleteOneById();
+        return res.status(200).json({ status: 'Question deleted' });
     } catch (e) {
         next(e);
     }
@@ -63,13 +85,13 @@ router.route('/questions/:questionId/answers').put(validateSession, async (req, 
 router.route('/questions/:questionId/answers/:answerId').put(validateSession, async (req, res, next) => {
     try {
         const { questionId, answerId }: { questionId: string, answerId: string } = req.params;
-        const scoreValue: string = req.query.score;
+        const scoreUpdateDirection: string = req.query.score;
         const isBest: string = req.query.isBest;
         if (!await questionService.exists({ _id: questionId })) {
             return res.status(404).json({ error: 'Question doesn\'t exist' });
         }
-        if (scoreValue) {
-            await questionService.updateAnswerScore(questionId, answerId, scoreValue);
+        if (scoreUpdateDirection) {
+            await questionService.updateAnswerScore(questionId, answerId, scoreUpdateDirection);
         }
         if (isBest) {
             await questionService.setAsBest(questionId, answerId, isBest);
