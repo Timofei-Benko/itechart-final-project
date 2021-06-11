@@ -1,7 +1,7 @@
 const User = require('./user.model');
 import IUser = require('./user.interface');
 
-const getSafeResponse = (reqBody: IUser): Partial<IUser> => {
+const getSafeResponse = (userData: IUser): Partial<IUser> => {
     const {
         firstName,
         lastName,
@@ -9,8 +9,12 @@ const getSafeResponse = (reqBody: IUser): Partial<IUser> => {
         username,
         position,
         experience,
-        languages
-    } = reqBody;
+        languages,
+        questionQty,
+        answerQty,
+        likedAnswerQty,
+        bestAnswerQty,
+    } = userData;
 
     return {
         firstName,
@@ -19,7 +23,11 @@ const getSafeResponse = (reqBody: IUser): Partial<IUser> => {
         username,
         position,
         experience,
-        languages
+        languages,
+        questionQty,
+        answerQty,
+        likedAnswerQty,
+        bestAnswerQty,
     };
 };
 
@@ -48,6 +56,13 @@ const create = async (userData: IUser): Promise<void> => {
 
 const getOne = async (filter: object): Promise<IUser & { _id: string }> => User.findOne(filter).exec();
 
+const updateStats = async (userId: string, statsItem: string): Promise<void> => {
+    const user = await User.findOne({ _id: userId });
+    await User.findOneAndUpdate({ _id: userId }, {
+        [statsItem]: user[statsItem] + 1,
+    });
+};
+
 const deleteOneById = async (filter: object): Promise<void> => User.findByIdAndDelete(filter);
 
 export = {
@@ -58,4 +73,5 @@ export = {
     create,
     deleteOneById,
     getOne,
+    updateStats,
 };
