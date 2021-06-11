@@ -29,6 +29,10 @@ const questionSchema = new Schema({
               type: Boolean,
               default: false,
             },
+            isLiked: {
+                type: Boolean,
+                default: false
+            },
             content: {
                 type: String,
             }
