@@ -1,10 +1,12 @@
+import e = require("express");
 const jwt = require('jsonwebtoken');
 const JWT_SECRET_KEY: string = require('../common/config').toString();
 const userService = require('../resources/users/user.service');
 
-const validateSession = (req, res, next) => {
+const validateSession = (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const token: string = req.headers.authorization.split(' ')[1].toString();
+        // @ts-ignore
+        const token: string | undefined = req.headers.authorization.split(' ')[1].toString();
         jwt.verify(token, JWT_SECRET_KEY, (err, decoded) => {
             if (decoded) {
                 req.body.user = userService.getOne({_id: decoded.id});
