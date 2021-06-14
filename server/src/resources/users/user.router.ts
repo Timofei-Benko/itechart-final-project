@@ -99,7 +99,7 @@ router.route('/users/:userId').get(validateSession, async (req: e.Request, res: 
 
 router.route('/users/:userId').delete(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const userId = req.params['userId'];
+        const { userId } = req.params;
         if (await userService.exists({ _id: userId })) {
             await userService.deleteOneById({ _id: userId });
             return res.status(200).json({ status: 'User deleted' })
