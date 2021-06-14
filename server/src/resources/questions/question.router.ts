@@ -115,5 +115,4 @@ router.route('/users/:userId/questions/:questionId/answers/:answerId').put(valid
     }
 });
 
-
 module.exports = router;
