@@ -27,7 +27,7 @@ router.route('/questions').post(validateSession, async (req: e.Request, res: e.R
     }
 });
 
-router.route('users/:userId/questions').get(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
+router.route('/users/:userId/questions').get(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { userId } = req.params;
         if (!await userService.exists({ _id: userId })) {
@@ -53,7 +53,7 @@ router.route('/questions/:questionId').get(async (req: e.Request, res: e.Respons
     }
 });
 
-router.route('users/:userId/questions/:questionId').delete(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
+router.route('/users/:userId/questions/:questionId').delete(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { questionId, userId } = req.params;
         if (!await questionService.exists({ _id: questionId })) {
@@ -62,7 +62,7 @@ router.route('users/:userId/questions/:questionId').delete(validateSession, asyn
         const user = await userService.getOne({ _id: userId });
         const question = await questionService.getOneById({ _id: questionId });
         if (user._id.toString() !== question.user.toString()) {
-            return res.status(403).json( { status: 'You can only delete questions posted by you' });
+            return res.status(403).json( { error: 'You can\'t delete questions posted not by you' });
         }
         await questionService.deleteOneById();
         return res.status(200).json({ status: 'Question deleted' });

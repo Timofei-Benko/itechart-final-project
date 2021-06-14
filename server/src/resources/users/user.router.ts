@@ -40,6 +40,7 @@ router.route('/auth/signup').post(async (req: e.Request, res: e.Response, next: 
             languages
         };
         const user = await userService.create(userData);
+        console.log(user)
         res.status(201).json(
             {
                 status: 'User created',

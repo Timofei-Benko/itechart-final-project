@@ -40,7 +40,7 @@ const isValidEmail = (email: string): boolean => {
 
 const exists = async (filter: object): Promise<boolean> => User.exists(filter);
 
-const create = async (userData: IUser): Promise<void> => {
+const create = async (userData: IUser): Promise<IUser> => {
     const user = new User({
         firstName: userData.firstName,
         lastName: userData.lastName,
@@ -52,6 +52,7 @@ const create = async (userData: IUser): Promise<void> => {
         languages: userData.languages
     });
     await user.save();
+    return user;
 }
 
 const getOne = async (filter: object): Promise<IUser & { _id: string }> => User.findOne(filter).exec();
