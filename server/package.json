@@ -5,7 +5,8 @@
   "type": "commonjs",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon --watch './**/*.ts' --exec 'ts-node' src/server.ts",
+    "dev": "nodemon --legacy-watch --watch './**/*.ts' --exec 'ts-node' src/server.ts",
+    "prod": "tsc & node build/server.js",
     "build": "tsc",
     "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
   },
