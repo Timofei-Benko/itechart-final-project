@@ -1,11 +1,11 @@
 const router = require('express').Router();
-
+import e = require('express');
 import IQuestion = require('./question.interface');
 const questionService = require('./question.service');
 import userService = require('../users/user.service');
 import validateSession = require('../../middleware/validate.session');
 
-router.route('/questions').get(async (_req, res, next) => {
+router.route('/questions').get(async (_req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const questions = await questionService.getAll();
         return res.status(200).json({ questions: questions });
@@ -14,7 +14,7 @@ router.route('/questions').get(async (_req, res, next) => {
     }
 });
 
-router.route('/questions').post(validateSession, async (req, res, next) => {
+router.route('/questions').post(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { user: user }: { user: string } = req.body.question;
         if (!await userService.exists({ _id: user })) {
@@ -27,9 +27,9 @@ router.route('/questions').post(validateSession, async (req, res, next) => {
     }
 });
 
-router.route('users/:userId/questions').get(validateSession, async (req, res, next) => {
+router.route('users/:userId/questions').get(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { userId }: { userId: string } = req.params;
+        const { userId } = req.params;
         if (!await userService.exists({ _id: userId })) {
             return res.status(404).json({ error: 'User doesn\'t exist' });
         }
@@ -40,9 +40,9 @@ router.route('users/:userId/questions').get(validateSession, async (req, res, ne
     }
 });
 
-router.route('/questions/:questionId').get(async (req, res, next) => {
+router.route('/questions/:questionId').get(async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { questionId }: { questionId: string } = req.params;
+        const { questionId } = req.params;
         if (!await questionService.exists({ _id: questionId })) {
             return res.status(404).json({ error: 'Question doesn\'t exist' });
         }
@@ -53,9 +53,9 @@ router.route('/questions/:questionId').get(async (req, res, next) => {
     }
 });
 
-router.route('questions/:questionId').delete(validateSession, async (req, res, next) => {
+router.route('users/:userId/questions/:questionId').delete(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { questionId }: { questionId: string } = req.params;
+        const { questionId } = req.params;
         if (!await questionService.exists({ _id: questionId })) {
             return res.status(404).json({ error: 'Question doesn\'t exist' });
         }
@@ -66,9 +66,9 @@ router.route('questions/:questionId').delete(validateSession, async (req, res, n
     }
 });
 
-router.route('/questions/:questionId/answers').put(validateSession, async (req, res, next) => {
+router.route('/questions/:questionId/answers').put(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { questionId }: { questionId: string } = req.params;
+        const { questionId } = req.params;
         if (!await questionService.exists({ _id: questionId })) {
             return res.status(404).json({ error: 'Question doesn\'t exist' });
         }
@@ -82,11 +82,11 @@ router.route('/questions/:questionId/answers').put(validateSession, async (req, 
     }
 });
 
-router.route('/questions/:questionId/answers/:answerId').put(validateSession, async (req, res, next) => {
+router.route('/questions/:questionId/answers/:answerId').put(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { questionId, answerId }: { questionId: string, answerId: string } = req.params;
-        const scoreUpdateDirection: string = req.query.score;
-        const isBest: string = req.query.isBest;
+        const { questionId, answerId } = req.params;
+        const scoreUpdateDirection = req.query['score'];
+        const isBest = req.query['isBest'];
         if (!await questionService.exists({ _id: questionId })) {
             return res.status(404).json({ error: 'Question doesn\'t exist' });
         }
