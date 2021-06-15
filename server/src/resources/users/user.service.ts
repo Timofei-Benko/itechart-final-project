@@ -1,8 +1,9 @@
 const User = require('./user.model');
 import IUser = require('./user.interface');
 
-const getSafeResponse = (userData: IUser): Partial<IUser> => {
+const getSafeResponse = (userData: IUser): Omit<IUser, 'password' | 'passwordHash'> => {
     const {
+        _id,
         firstName,
         lastName,
         email,
@@ -17,6 +18,7 @@ const getSafeResponse = (userData: IUser): Partial<IUser> => {
     } = userData;
 
     return {
+        _id,
         firstName,
         lastName,
         email,
