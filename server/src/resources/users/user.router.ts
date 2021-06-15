@@ -40,7 +40,6 @@ router.route('/auth/signup').post(async (req: e.Request, res: e.Response, next: 
             languages
         };
         const user = await userService.create(userData);
-        console.log(user)
         res.status(201).json(
             {
                 status: 'User created',
@@ -60,7 +59,7 @@ router.route('/auth/signin').post(async (req: e.Request, res: e.Response, next: 
         }
         const user: IUser & { _id: string } = await userService.getOne({ email });
         bcrypt.compare(password, user.passwordHash, (err, matches) => {
-            if (err) return res.status(401).json({ error: 'Authentication failed' });
+            if (err) return res.status(500).json({ error: 'Authentication failed' });
             if (matches) {
                 const token: string = jwt.sign({
                     id: user._id,
