@@ -18,5 +18,5 @@ module.exports = {
         updateAnswer: (userId, questionId, answerId, queryParams) => {
             return `${URL}/users/${userId}/questions/${questionId}/answers/${answerId}${queryParams}`;
         },
-    }
+    },
 };
