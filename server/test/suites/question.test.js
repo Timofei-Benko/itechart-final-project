@@ -1,7 +1,8 @@
 const expect = require('chai').expect;
 const request = require('node-fetch');
-const routes = require('../routes').questions;
-const userRoutes = require('../routes').users;
+const questionRoutes = require('./config/routes').questions;
+const userRoutes = require('./config/routes').users;
+const addTenToScore = require('./config/addTenToAnswerScore');
 
 const TEST_USER_DATA = {
     user: {
@@ -53,7 +54,7 @@ describe('Question suite', () => {
     });
 
     after(async () => {
-        await request(routes.deleteOne(userId, questionId), {
+        await request(questionRoutes.deleteOne(userId, questionId), {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -67,7 +68,7 @@ describe('Question suite', () => {
     describe('POST', () => {
 
         it('should return error if user doesn\'t exist', async () => {
-            const response = await request(routes.create, {
+            const response = await request(questionRoutes.create, {
                 method: 'POST',
                 body: JSON.stringify({ question: { ...TEST_QUESTION_DATA.question, user: NONEXISTENT_USER_ID } }),
                 headers: {
@@ -80,8 +81,8 @@ describe('Question suite', () => {
             expect(responseBody).to.have.property('error');
         });
 
-        it('should post question', async () => {
-            const response = await request(routes.create, {
+        it('should post question and update questionQty field in corresponding user document', async () => {
+            const response = await request(questionRoutes.create, {
                 method: 'POST',
                 body: JSON.stringify({
                     question: { ...TEST_QUESTION_DATA.question, user: userId },
@@ -93,16 +94,24 @@ describe('Question suite', () => {
             });
             const responseBody = await response.json();
             questionId = responseBody.question._id;
+            const userResponse = await request(userRoutes.getOne(userId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userResponseBody = await userResponse.json();
             expect(response.status).to.equal(201);
             expect(responseBody).to.have.property('status');
             expect(responseBody).to.have.property('question');
+            expect(userResponseBody.user.questionQty).to.be.greaterThan(0);
         })
     });
 
     describe('GET', () => {
 
         it('should get all questions', async () => {
-            const response = await request(routes.getAll, {
+            const response = await request(questionRoutes.getAll, {
                 method: 'GET',
             });
             const responseBody = await response.json();
@@ -117,7 +126,7 @@ describe('Question suite', () => {
         });
 
         it('should get all questions posted by a user', async () => {
-            const response = await request(routes.getAllByUserId(userId), {
+            const response = await request(questionRoutes.getAllByUserId(userId), {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}` },
             });
@@ -128,7 +137,7 @@ describe('Question suite', () => {
         })
 
         it('should get a question', async () => {
-            const response = await request(routes.getOne(questionId), {
+            const response = await request(questionRoutes.getOne(questionId), {
                 method: 'GET',
             });
             const responseBody = await response.json();
@@ -140,7 +149,7 @@ describe('Question suite', () => {
     describe('PUT', () => {
 
         it('should return error if question doesn\'t exist', async () => {
-            const response = await request(routes.addAnswer(NONEXISTENT_QUESTION_ID), {
+            const response = await request(questionRoutes.addAnswer(NONEXISTENT_QUESTION_ID), {
                 method: 'PUT',
                 body: JSON.stringify(TEST_QUESTION_DATA),
                 headers: {
@@ -154,7 +163,7 @@ describe('Question suite', () => {
         });
 
         it('should return error if user doesn\'t exist', async () => {
-            const response = await request(routes.addAnswer(questionId), {
+            const response = await request(questionRoutes.addAnswer(questionId), {
                 method: 'PUT',
                 body: JSON.stringify({ answer: { ...TEST_QUESTION_DATA.answer, user: NONEXISTENT_USER_ID } }),
                 headers: {
@@ -168,7 +177,7 @@ describe('Question suite', () => {
         });
 
         it('should add answer', async () => {
-            const response = await request(routes.addAnswer(questionId), {
+            const response = await request(questionRoutes.addAnswer(questionId), {
                 method: 'PUT',
                 body: JSON.stringify({ answer: { ...TEST_QUESTION_DATA.answer, user: userId } }),
                 headers: {
@@ -178,12 +187,22 @@ describe('Question suite', () => {
             });
             const responseBody = await response.json();
             answerId = responseBody.answer._id;
+
+            const userResponse = await request(userRoutes.getOne(userId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userResponseBody = await userResponse.json();
+
             expect(response.status).to.be.oneOf([ 200, 201 ]);
             expect(responseBody).to.have.property('answer');
+            expect(userResponseBody.user.answerQty).to.be.greaterThan(0);
         });
 
         it('should return error if question doesn\'t exist', async () => {
-            const response = await request(routes.updateAnswer(NONEXISTENT_QUESTION_ID, answerId, '?score=up'), {
+            const response = await request(questionRoutes.updateAnswer(NONEXISTENT_QUESTION_ID, answerId, '?score=up'), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -196,7 +215,7 @@ describe('Question suite', () => {
         });
 
         it('should return error if answer doesn\'t exist', async () => {
-            const response = await request(routes.updateAnswer(questionId, NONEXISTENT_ANSWER_ID, '?score=up'), {
+            const response = await request(questionRoutes.updateAnswer(questionId, NONEXISTENT_ANSWER_ID, '?score=up'), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -209,15 +228,17 @@ describe('Question suite', () => {
         });
 
         it('should update answer score', async () => {
-            const response = await request(routes.updateAnswer(questionId, answerId, '?score=up'), {
+            const response = await request(questionRoutes.updateAnswer(questionId, answerId, '?score=up'), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
                 },
             });
+
             const responseBody = await response.json();
-            const questionResponse = await request(routes.getOne(questionId), {
+
+            const questionResponse = await request(questionRoutes.getOne(questionId), {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -230,8 +251,8 @@ describe('Question suite', () => {
             expect(answer.score).to.be.greaterThan(0);
         });
 
-        it('should update isBest status', async () => {
-            const response = await request(routes.updateAnswer(questionId, answerId, '?isBest=1'), {
+        it('should update isBest status and bestAnswerQty field in corresponding user document', async () => {
+            const response = await request(questionRoutes.updateAnswer(questionId, answerId, '?isBest=1'), {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -239,7 +260,8 @@ describe('Question suite', () => {
                 },
             });
             const responseBody = await response.json();
-            const questionResponse = await request(routes.getOne(questionId), {
+
+            const questionResponse = await request(questionRoutes.getOne(questionId), {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`,
@@ -247,9 +269,45 @@ describe('Question suite', () => {
             });
             const questionResponseBody = await questionResponse.json();
             const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId);
+
+            const userResponse = await request(userRoutes.getOne(userId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userResponseBody = await userResponse.json();
+
             expect(response.status).to.equal(200);
             expect(responseBody).to.have.property('status');
             expect(answer.isBest).to.equal(true);
+            expect(userResponseBody.user.bestAnswerQty).to.be.greaterThan(0);
+        });
+
+        it(`should set isLiked field in answer subdocument to true 
+        and update likedAnswerQty field in corresponding user document`,async () => {
+
+            await addTenToScore(questionId, answerId, token);
+
+            const questionResponse = await request(questionRoutes.getOne(questionId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const questionResponseBody = await questionResponse.json();
+            const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId);
+
+            const userResponse = await request(userRoutes.getOne(userId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            const userResponseBody = await userResponse.json();
+
+            expect(answer.isLiked).to.equal(true);
+            expect(userResponseBody.user.likedAnswerQty).to.be.greaterThan(0);
         });
     });
 });

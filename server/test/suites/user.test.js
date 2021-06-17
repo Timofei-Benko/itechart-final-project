@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const request = require('node-fetch');
-const routes = require('../routes').users;
+const userRoutes = require('./config/routes').users;
 
 const TEST_USER_DATA = {
     user: {
@@ -20,7 +20,7 @@ describe('User suite', () => {
     const NONEXISTENT_USER_ID = '60c37aa8d7c69c566e1e7f53';
 
     after(async () => {
-        await request(routes.deleteOne(userId), {
+        await request(userRoutes.deleteOne(userId), {
             method: 'DELETE',
             headers: { 'Authorization': `Bearer ${token}` },
         });
@@ -28,7 +28,7 @@ describe('User suite', () => {
 
     describe('POST',() => {
         it('should return error if email format is incorrect', async () => {
-            const response = await request(routes.signUp, {
+            const response = await request(userRoutes.signUp, {
                 method: 'POST',
                 body: JSON.stringify({ user: { ...TEST_USER_DATA.user, email: 'bad_email_format' } }),
                 headers: { 'Content-Type': 'application/json' },
@@ -39,7 +39,7 @@ describe('User suite', () => {
         });
 
         it('should return error if password format is incorrect', async () => {
-            const response = await request(routes.signUp, {
+            const response = await request(userRoutes.signUp, {
                 method: 'POST',
                 body: JSON.stringify({ user: { ...TEST_USER_DATA.user, password: 'bad' } }),
                 headers: { 'Content-Type': 'application/json' },
@@ -50,7 +50,7 @@ describe('User suite', () => {
         });
 
         it('should sign up successfully',async () => {
-            const response = await request(routes.signUp, {
+            const response = await request(userRoutes.signUp, {
                 method: 'POST',
                 body: JSON.stringify(TEST_USER_DATA),
                 headers: { 'Content-Type': 'application/json' },
@@ -64,7 +64,7 @@ describe('User suite', () => {
         });
 
         it('should return error if user already exists',async () => {
-            const response = await request(routes.signUp, {
+            const response = await request(userRoutes.signUp, {
                 method: 'POST',
                 body: JSON.stringify(TEST_USER_DATA),
                 headers: { 'Content-Type': 'application/json' },
@@ -75,7 +75,7 @@ describe('User suite', () => {
         });
 
         it('should return error if user doesn\'t exist', async () => {
-            const response = await request(routes.signIn, {
+            const response = await request(userRoutes.signIn, {
                 method: 'POST',
                 body: JSON.stringify({ user: { ...TEST_USER_DATA.user, email: 'nonexistent@test.com' } }),
                 headers: { 'Content-Type': 'application/json' },
@@ -86,7 +86,7 @@ describe('User suite', () => {
         });
 
         it('should return error if password is incorrect', async () => {
-            const response = await request(routes.signIn, {
+            const response = await request(userRoutes.signIn, {
                 method: 'POST',
                 body: JSON.stringify({ user: { ...TEST_USER_DATA.user, password: 'incorrect_password' } }),
                 headers: { 'Content-Type': 'application/json' },
@@ -97,7 +97,7 @@ describe('User suite', () => {
         });
 
         it('should sign in successfully', async ()=> {
-            const response = await request(routes.signIn, {
+            const response = await request(userRoutes.signIn, {
                 method: 'POST',
                 body: JSON.stringify(TEST_USER_DATA),
                 headers: { 'Content-Type': 'application/json' },
@@ -114,7 +114,7 @@ describe('User suite', () => {
     describe('GET', () => {
 
         it('should get user', async () => {
-            const response = await request(routes.getOne(userId), {
+            const response = await request(userRoutes.getOne(userId), {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}`}
             });
@@ -124,7 +124,7 @@ describe('User suite', () => {
         });
 
         it('should return error if user doesn\'t exist', async () => {
-            const response = await request(routes.getOne(NONEXISTENT_USER_ID), {
+            const response = await request(userRoutes.getOne(NONEXISTENT_USER_ID), {
                 method: 'GET',
                 headers: { 'Authorization': `Bearer ${token}`}
             });
