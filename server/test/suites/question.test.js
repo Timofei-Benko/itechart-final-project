@@ -1,8 +1,8 @@
 const expect = require('chai').expect;
 const request = require('node-fetch');
-const questionRoutes = require('./config/routes').questions;
-const userRoutes = require('./config/routes').users;
-const addTenToScore = require('./config/addTenToAnswerScore');
+const questionRoutes = require('../config/routes').questions;
+const userRoutes = require('../config/routes').users;
+const addTenToScore = require('../config/addTenToAnswerScore');
 
 const TEST_USER_DATA = {
     user: {

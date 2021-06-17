@@ -1,6 +1,6 @@
 const expect = require('chai').expect;
 const request = require('node-fetch');
-const userRoutes = require('./config/routes').users;
+const userRoutes = require('../config/routes').users;
 
 const TEST_USER_DATA = {
     user: {
