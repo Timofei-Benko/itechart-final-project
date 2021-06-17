@@ -8,10 +8,10 @@
     "dev": "nodemon --legacy-watch --watch './**/*.ts' --exec ts-node src/server.ts",
     "prod": "tsc & node build/server.js",
     "build": "tsc",
-    "test": "npm run build & mocha test/suites --timeout 10000 --exit",
-    "test:user": "npm run build & mocha test/suites/user.*.js --timeout 10000 --exit",
-    "test:question": "npm run build & mocha test/suites/question.*.js --timeout 10000 --exit",
-    "lint": "npx eslint . --ext .js,.jsx,.ts,.tsx"
+    "test": "mocha test/suites --timeout 10000 --exit",
+    "test:user": "mocha test/suites/user.*.js --timeout 10000 --exit",
+    "test:question": "mocha test/suites/question.*.js --timeout 10000 --exit",
+    "lint": "npx eslint . --ext .ts"
   },
   "keywords": [],
   "author": "",
