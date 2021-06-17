@@ -19,6 +19,13 @@ describe('User suite', () => {
     let userId, token;
     const NONEXISTENT_USER_ID = '60c37aa8d7c69c566e1e7f53';
 
+    after(async () => {
+        await request(routes.deleteOne(userId), {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` },
+        });
+    });
+
     describe('POST',() => {
         it('should return error if email format is incorrect', async () => {
             const response = await request(routes.signUp, {
@@ -124,13 +131,6 @@ describe('User suite', () => {
             const responseBody = await response.json();
             expect(response.status).to.equal(404);
             expect(responseBody).to.have.property('error');
-        });
-    });
-
-    after(async () => {
-        await request(routes.deleteOne(userId), {
-            method: 'DELETE',
-            headers: { 'Authorization': `Bearer ${token}` },
         });
     });
 });
