@@ -85,8 +85,6 @@ const updateAnswerScore = async (questionId: string, answerId: string, direction
         }
     })[0];
 
-    console.log(answerData)
-
     let updatedScore: number = answerData.score;
 
     if (direction === 'up') updatedScore += 1;
