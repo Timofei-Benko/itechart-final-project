@@ -15,8 +15,8 @@ module.exports = {
         getOne: (questionId) => `${URL}/questions/${questionId}`,
         deleteOne: (userId, questionId) =>`${URL}/users/${userId}/questions/${questionId}`,
         addAnswer: (questionId) => `${URL}/questions/${questionId}/answers`,
-        updateAnswer: (userId, questionId, answerId, queryParams) => {
-            return `${URL}/users/${userId}/questions/${questionId}/answers/${answerId}${queryParams}`;
+        updateAnswer: (questionId, answerId, queryParams) => {
+            return `${URL}/questions/${questionId}/answers/${answerId}${queryParams}`;
         },
     },
 };
