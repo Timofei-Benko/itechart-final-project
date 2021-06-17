@@ -62,9 +62,9 @@ router.route('/auth/signin').post(async (req: e.Request, res: e.Response, next: 
             if (err) return res.status(500).json({ error: 'Authentication failed' });
             if (matches) {
                 const token: string = jwt.sign({
-                    id: user._id,
-                    email: user.email,
-                },
+                        id: user._id,
+                        email: user.email,
+                    },
                     JWT_SECRET_KEY,
                     {
                         expiresIn: '1h',
@@ -72,6 +72,7 @@ router.route('/auth/signin').post(async (req: e.Request, res: e.Response, next: 
                 )
                 return res.status(200).json({
                     status: 'Signed in successfully',
+                    user: userService.getSafeResponse(user),
                     token,
                 });
             } else {
