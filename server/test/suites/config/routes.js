@@ -1,4 +1,4 @@
-const { PORT } = require('../build/common/config');
+const { PORT } = require('../../../build/common/config');
 const URL = `http://localhost:${PORT}/api`;
 
 module.exports = {
