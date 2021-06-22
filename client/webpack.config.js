@@ -45,11 +45,13 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, "build"),
         filename: "bundle.js",
+        publicPath: '/'
     },
     devServer: {
         contentBase: path.join(__dirname, "public"),
         compress: true,
         hot: true,
         port: 4002,
+        historyApiFallback: true
     },
 };
