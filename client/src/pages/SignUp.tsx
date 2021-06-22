@@ -1,4 +1,5 @@
-import React, {FunctionComponent, useEffect, useState} from "react";
+import React, { FunctionComponent, useState } from "react";
+import { NavLink } from "react-router-dom";
 
 import * as apiService from '../common/apiService';
 
@@ -81,10 +82,14 @@ const SignUp: FunctionComponent = (): JSX.Element => {
             });
         }
 
+        let response;
+
         try {
             await apiService.signUp(getRequestBody());
         } catch(e) {
-            console.log(e);
+            if (e.response.status === 409) {
+                // do something if user already exists
+            }
         }
     };
 
@@ -141,14 +146,16 @@ const SignUp: FunctionComponent = (): JSX.Element => {
                         }
                     }
                     >Already have an account?
-                        <ButtonLink>Sign in</ButtonLink>
+                        <NavLink to='/login'>
+                            <ButtonLink>Sign In</ButtonLink>
+                        </NavLink>
                     </div>
                     <Input onChange={inputChangeHandler}
-                           type={'text'} name={'firstName'} placeholder={'First Name *'} />
+                           required type={'text'} name={'firstName'} placeholder={'First Name *'} />
                     <Input onChange={inputChangeHandler}
-                           type={'text'} name={'lastName'} placeholder={'Last Name *'} />
+                           required type={'text'} name={'lastName'} placeholder={'Last Name *'} />
                     <Input onChange={inputChangeHandler}
-                           type={'email'} name={'email'} placeholder={'Email *'} />
+                           required type={'email'} name={'email'} placeholder={'Email *'} />
                     <Input onChange={inputChangeHandler}
                            required
                            type={'password'}
