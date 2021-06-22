@@ -1,10 +1,14 @@
-import React, {FunctionComponent} from "react";
+import React, { FunctionComponent } from "react";
+import 'normalize.css';
+import GlobalStyle from "./components/dumb/GlobalStyle";
+import SignUp from './pages/SignUp';
 
 const App: FunctionComponent = (): JSX.Element => {
     return (
-        <div>
-            <p>Hello world</p>
-        </div>
+        <>
+            <GlobalStyle/>
+            <SignUp/>
+        </>
     );
 };
 

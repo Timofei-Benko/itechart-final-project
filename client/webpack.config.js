@@ -1,5 +1,5 @@
 const path = require('path');
-const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
+// const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
@@ -21,16 +21,23 @@ module.exports = {
                     },
                 },
             },
+            {
+                test: /\.css$/,
+                use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+            }
         ],
     },
     plugins: [
-        new ForkTsCheckerWebpackPlugin({
-            async: false,
-            eslint: {
-                files: "./src/**/*",
-            },
+        // new ForkTsCheckerWebpackPlugin({
+        //     async: false,
+        //     eslint: {
+        //         files: "./src/**/*",
+        //     },
+        // }),
+        new HtmlWebpackPlugin({
+            title: "Not Stack Overflow",
+            template: './public/index.html'
         }),
-        new HtmlWebpackPlugin(),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
@@ -42,6 +49,7 @@ module.exports = {
     devServer: {
         contentBase: path.join(__dirname, "public"),
         compress: true,
-        port: 4001,
+        hot: true,
+        port: 4002,
     },
 };
