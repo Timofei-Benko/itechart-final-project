@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 // const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -39,10 +40,17 @@ module.exports = {
             title: "Not Stack Overflow",
             template: './public/index.html'
         }),
-        new Dotenv()
+        new Dotenv(),
+        new webpack.ProvidePlugin({
+            Buffer: ['buffer', 'Buffer'],
+            process: 'process/browser'
+        }),
     ],
     resolve: {
         extensions: [".tsx", ".ts", ".js"],
+        fallback: {
+            'crypto': false,
+        }
     },
     output: {
         path: path.resolve(__dirname, "build"),

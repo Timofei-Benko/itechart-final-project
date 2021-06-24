@@ -33,18 +33,10 @@ const MultiSelect = (props): JSX.Element => {
                     minHeight: '40px',
                     backgroundColor: '#f9f9fa',
                     boxShadow: 'none',
-                    transition: 'none',
+                    borderRadius: '5px',
                     ':hover': {
                         borderColor: 'black'
                     }
-                }),
-                container: (provided, _state) => ({
-                    ...provided,
-                    transition: 'none',
-                }),
-                indicatorContainer: (provided, _state) => ({
-                    ...provided,
-                    transition: 'none',
                 }),
             }}
             theme={ theme => ({

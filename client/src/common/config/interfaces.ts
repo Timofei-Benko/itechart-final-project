@@ -1,3 +1,5 @@
+import rootReducer from '../../redux/reducers/rootReducer';
+
 export interface ISignUpUserData {
     firstName?: string,
     lastName?: string,
@@ -9,3 +11,5 @@ export interface ISignUpUserData {
     experience?: number,
     languages?: (string | undefined)[],
 }
+
+export type RootState = ReturnType<typeof rootReducer>;

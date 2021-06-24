@@ -84,6 +84,33 @@ router.route('/auth/signin').post(async (req: e.Request, res: e.Response, next: 
     }
 });
 
+router.route('/:userId/reauthenticate').post(async (req: e.Request, res: e.Response, next: e.NextFunction) => {
+    try {
+        const { userId } = req.params;
+        if (await userService.exists({ _id: userId })) {
+            const user: IUser & { _id: string} = await userService.getOne({ _id: userId });
+            const token: string = jwt.sign({
+                    id: user._id,
+                    email: user.email,
+                },
+                JWT_SECRET_KEY,
+                {
+                    expiresIn: '1h',
+                }
+            )
+            return res.status(200).json({
+                status: 'Reauthenticated in successfully',
+                user: userService.getSafeResponse(user),
+                token,
+            });
+        } else {
+            return res.status(404).json({ error: 'User doesn\'t exist' });
+        }
+    } catch (e) {
+        next(e);
+    }
+});
+
 router.route('/users/:userId').get(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { userId } = req.params;

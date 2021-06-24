@@ -13,6 +13,8 @@ const Input = styled.input`
   border: 1px solid;
   border-color: ${(props: {errorDisplay?: boolean}) => props.errorDisplay ? 'red' : 'rgba(201, 199, 199, 0.7)'};
   font-size: 14px;
+  border-radius: 5px;
+  transition: all .1s ease-in-out;
   
   :focus,
   :hover {
