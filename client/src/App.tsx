@@ -1,25 +1,56 @@
-import React, { FunctionComponent } from "react";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import React, { FunctionComponent, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
+
+import store from "./redux/store";
+import setUserState from './redux/setUserState'
+
+import keepSignedIn from './common/authentication/keepSignedIn';
+import isSignedIn from "./common/authentication/isSignedIn";
+import { RootState } from "./common/config/interfaces";
 
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
+import PersonalSpace from "./pages/PersonalSpace";
 
 import 'normalize.css';
 import GlobalStyle from "./components/dumb/GlobalStyle";
 
-
 const App: FunctionComponent = (): JSX.Element => {
+
+    useEffect(() => {
+        if (isSignedIn()) {
+            store.dispatch(setUserState());
+        }
+
+        keepSignedIn();
+    }, []);
+
     return (
         <Router>
             <GlobalStyle/>
+
             <Switch>
                 <Route path='/login'>
-                    <SignIn />
+                    <SignIn/>
                 </Route>
+
                 <Route path='/register'>
-                    <SignUp />
+                    <SignUp/>
                 </Route>
             </Switch>
+
+            {
+                isSignedIn()
+                    ?
+                    <Switch>
+                        <Route path='/personal-space'>
+                            <PersonalSpace />
+                        </Route>
+                    </Switch>
+                    :
+                    <Redirect to='/login' />
+            }
+
         </Router>
     );
 };

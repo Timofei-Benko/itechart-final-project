@@ -1,19 +1,25 @@
 import React, { FunctionComponent, useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Redirect } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+
+import { ISignUpUserData, RootState } from '../common/config/interfaces';
+
+import { PASSWORD_VALIDATION, ERRORS } from '../common/config/constants';
+
+import { SET_SIGN_UP_ERROR } from "../redux/actions";
 
 import * as apiService from '../common/apiService';
 
 import ContentContainer from '../components/dumb/ContentContainer';
 import Form from '../components/dumb/Form';
+import FormTitle from "../components/dumb/FormTitle";
+import FormHeader from "../components/dumb/FormHeader";
 import Input from '../components/dumb/Input';
 import Delimiter from '../components/dumb/Delimiter';
 import SubmitBtn from '../components/dumb/SubmitBtn';
-import PasswordError from '../components/dumb/PasswordError';
+import InputError from '../components/dumb/InputError';
 import LanguagesMultiSelect from '../components/smart/MultiSelect';
 import ButtonLink from '../components/dumb/ButtonLink';
-
-import { ISignUpUserData } from '../config/interfaces';
-import { PASSWORD_VALIDATION } from '../components/constants';
 
 const SignUp: FunctionComponent = (): JSX.Element => {
 
@@ -21,12 +27,15 @@ const SignUp: FunctionComponent = (): JSX.Element => {
 
     const [languageList, setLanguageList] = useState<Array<{ value?: string, label?: string}>>([]);
 
-    const [error, setError] = useState({
+    const [passwordError, setPasswordError] = useState<{ message: string, display: boolean }>({
         message: '',
         display: false,
     });
 
-    const getRequestBody = (): { user: ISignUpUserData } => {
+    const signUpError = useSelector((state: RootState) => state.signUpError);
+    const dispatch = useDispatch();
+
+    const getRequestBody = (): ISignUpUserData => {
         const {
             firstName,
             lastName,
@@ -38,16 +47,14 @@ const SignUp: FunctionComponent = (): JSX.Element => {
         } = userData;
 
         return {
-            user: {
-                firstName,
-                lastName,
-                email,
-                password,
-                username,
-                position,
-                experience,
-                languages: languageList.map(el => el.value),
-            }
+            firstName,
+            lastName,
+            email,
+            password,
+            username,
+            position,
+            experience,
+            languages: languageList.map(el => el.value),
         };
     };
 
@@ -57,10 +64,9 @@ const SignUp: FunctionComponent = (): JSX.Element => {
         const isValidPass: boolean = PASSWORD_VALIDATION.test(userData.password as string);
 
         if (!isValidPass) {
-            setError({
-                ...error,
-                message: 'password must be at least 9 characters long, contain upper-, lowercase letters and' +
-                    ' special symbols',
+            setPasswordError({
+                ...passwordError,
+                message: ERRORS.INVALID_PASSWORD_FORMAT,
                 display: !isValidPass,
             });
             return;
@@ -69,26 +75,30 @@ const SignUp: FunctionComponent = (): JSX.Element => {
         const isSamePass: boolean = userData.password as string === userData.passwordConfirmation as string;
 
         if (!isSamePass) {
-            setError({
-                ...error,
-                message: 'passwords do not match',
+            setPasswordError({
+                ...passwordError,
+                message: ERRORS.PASSWORDS_DO_NOT_MATCH,
                 display: !isSamePass,
             });
             return;
         } else {
-            setError({
-                ...error,
+            setPasswordError({
+                ...passwordError,
                 display: !isSamePass,
             });
         }
-
-        let response;
 
         try {
             await apiService.signUp(getRequestBody());
         } catch(e) {
             if (e.response.status === 409) {
-                // do something if user already exists
+                dispatch({
+                    type: SET_SIGN_UP_ERROR,
+                    payload: {
+                        display: true,
+                        message: ERRORS.ALREADY_SIGNED_UP,
+                    },
+                });
             }
         }
     };
@@ -123,33 +133,16 @@ const SignUp: FunctionComponent = (): JSX.Element => {
 
     return (
         <>
+            { signUpError.display && <Redirect to='/login' />}
             <ContentContainer>
                 <Form onSubmit={ handleSubmit }>
-                    <h1 style={
-                        {
-                            letterSpacing: '2px',
-                            fontWeight: 'bold',
-                            color: 'coral',
-                            textShadow: '2px 2px gray',
-                        }
-                    }
-                    >Sign Up
-                    </h1>
-                    <div
-                        style={
-                        {
-                            display: 'flex',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            gap: '1rem',
-                            marginBottom: '1rem'
-                        }
-                    }
+                    <FormTitle>Sign Up</FormTitle>
+                    <FormHeader
                     >Already have an account?
                         <NavLink to='/login'>
                             <ButtonLink>Sign In</ButtonLink>
                         </NavLink>
-                    </div>
+                    </FormHeader>
                     <Input onChange={inputChangeHandler}
                            required type={'text'} name={'firstName'} placeholder={'First Name *'} />
                     <Input onChange={inputChangeHandler}
@@ -164,12 +157,12 @@ const SignUp: FunctionComponent = (): JSX.Element => {
                            autoComplete={'new-password'}
                            // @ts-ignore
                            withError={ true }
-                           errorDisplay={ error.display }
+                           errorDisplay={ passwordError.display }
                     />
-                    <PasswordError
+                    <InputError
                         // @ts-ignore
-                        errorDisplay={ error.display }
-                        errorMessage={ error.message }
+                        errorDisplay={ passwordError.display }
+                        errorMessage={ passwordError.message }
                     />
                     <Input onChange={inputChangeHandler}
                            required
@@ -178,7 +171,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
                            placeholder={'Confirm Password *'}
                            autoComplete={'new-password'}
                             // @ts-ignore
-                           errorDisplay={ error.display }
+                           errorDisplay={ passwordError.display }
                     />
                     <Delimiter />
                     <Input onChange={inputChangeHandler}
@@ -200,7 +193,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
                         languageList={ languageList }
                         setLanguageList={ setLanguageList }
                     />
-                    <SubmitBtn type={'submit'}/>
+                    <SubmitBtn type={'submit'} value='Sign Up'/>
                 </Form>
             </ContentContainer>
         </>
