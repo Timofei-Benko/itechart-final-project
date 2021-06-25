@@ -84,7 +84,7 @@ router.route('/auth/signin').post(async (req: e.Request, res: e.Response, next: 
     }
 });
 
-router.route('/:userId/reauthenticate').post(async (req: e.Request, res: e.Response, next: e.NextFunction) => {
+router.route('/users/:userId/reauthenticate').get(async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { userId } = req.params;
         if (await userService.exists({ _id: userId })) {
@@ -99,7 +99,7 @@ router.route('/:userId/reauthenticate').post(async (req: e.Request, res: e.Respo
                 }
             )
             return res.status(200).json({
-                status: 'Reauthenticated in successfully',
+                status: 'Reauthenticated successfully',
                 user: userService.getSafeResponse(user),
                 token,
             });
