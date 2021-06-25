@@ -73,19 +73,11 @@ const addAnswer = async (filter: object, answer: IAnswer): Promise<IAnswer> => {
     return question.answers[question.answers.length - 1];
 };
 
-const updateAnswerScore = async (questionId: string, answerId: string, direction: string): Promise<void> => {
+const updateAnswerScore = async (userId: string, questionId: string, answerId: string, direction: string): Promise<void> => {
     const question = await Question.findOne({ _id: questionId });
-    const answerData: { score: number, isLiked: boolean, userId: string } = await question.answers.map(answer => {
-        if (answer._id.toString() === answerId.toString()) {
-            return {
-                score: answer.score,
-                isLiked: answer.isLiked,
-                userId: answer.user._id.toString(),
-            }
-        }
-    })[0];
+    const answer = await question.answers.find(answer => answer._id.toString() === answerId.toString());
 
-    let updatedScore: number = answerData.score;
+    let updatedScore: number = answer.score;
 
     if (direction === 'up') updatedScore += 1;
     if (direction === 'down') updatedScore -= 1;
@@ -95,6 +87,9 @@ const updateAnswerScore = async (questionId: string, answerId: string, direction
             $set: {
                 'answers.$[answer].score': updatedScore,
             },
+            $push: {
+                'answers.$[answer].usersVoted': userId,
+            },
         }, {
             arrayFilters: [{ 'answer._id': answerId }],
             new: true,
@@ -102,7 +97,7 @@ const updateAnswerScore = async (questionId: string, answerId: string, direction
         }
     );
 
-    if (updatedScore >= 10 && !answerData.isLiked) {
+    if (updatedScore >= 10 && !answer.isLiked) {
         await Question.findOneAndUpdate({ _id: questionId }, {
                 $set: { 'answers.$[answer].isLiked': true },
             },
@@ -112,9 +107,16 @@ const updateAnswerScore = async (questionId: string, answerId: string, direction
                 useFindAndModify: true,
             }
         );
-        await userService.updateStats(answerData.userId, 'likedAnswerQty');
+        await userService.updateStats(answer.userId, 'likedAnswerQty');
     }
 };
+
+const checkIfUserVoted = async (userId: string, questionId: string, answerId: string): Promise<boolean> => {
+    const question = await Question.findOne({ _id: questionId });
+    const answer = question.answers.find(answer => answer._id.toString() === answerId);
+    const foundUser = answer.usersVoted.find(id => id.toString() === userId);
+    return !!foundUser;
+}
 
 const setIsBestStatus = async (questionId: string, answerId: string, value: string) => {
     const numericVal: number = +value;
@@ -143,4 +145,5 @@ export = {
     addAnswer,
     updateAnswerScore,
     setIsBestStatus,
+    checkIfUserVoted,
 };

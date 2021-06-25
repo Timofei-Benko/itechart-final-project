@@ -35,7 +35,11 @@ const questionSchema = new Schema({
             },
             content: {
                 type: String,
-            }
+            },
+            usersVoted: [{
+                type: Schema.Types.ObjectId,
+                required: true,
+            }]
         }],
     },
 }, { typePojoToMixed: false, timestamps: true, });

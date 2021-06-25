@@ -95,6 +95,7 @@ router.route('/questions/:questionId/answers').put(validateSession, async (req: 
 
 router.route('/questions/:questionId/answers/:answerId').put(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
+        const userId = req.body.user._id;
         const { questionId, answerId } = req.params;
         const scoreUpdateDirection = req.query['score'];
         const isBest = req.query['isBest'];
@@ -104,8 +105,11 @@ router.route('/questions/:questionId/answers/:answerId').put(validateSession, as
         if (!await questionService.answerExists({ _id: questionId }, answerId)) {
             return res.status(404).json({ error: 'Answer doesn\'t exist' });
         }
+        // if (await questionService.checkIfUserVoted(userId, questionId, answerId)) {
+        //     return res.status(403).json({ error: 'You have already voted for this answer' });
+        // }
         if (scoreUpdateDirection) {
-            await questionService.updateAnswerScore(questionId, answerId, scoreUpdateDirection);
+            await questionService.updateAnswerScore(userId, questionId, answerId, scoreUpdateDirection);
         }
         if (isBest) {
             const user = await userService.getOne({ _id: req.body.user._id });
