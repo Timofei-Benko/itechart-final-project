@@ -1,19 +1,19 @@
-import React, { FunctionComponent, useState } from "react";
-import { NavLink, Redirect } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import React, { FunctionComponent, useState } from 'react';
+import { NavLink, Redirect } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { ISignUpUserData, RootState } from '../common/config/interfaces';
 
 import { PASSWORD_VALIDATION, ERRORS } from '../common/config/constants';
 
-import { SET_SIGN_UP_ERROR } from "../redux/actions";
+import { SET_SIGN_UP_ERROR } from '../redux/actions';
 
 import * as apiService from '../common/apiService';
 
 import ContentContainer from '../components/dumb/ContentContainer';
 import Form from '../components/dumb/Form';
-import FormTitle from "../components/dumb/FormTitle";
-import FormHeader from "../components/dumb/FormHeader";
+import FormTitle from '../components/dumb/Title';
+import FormHeader from '../components/dumb/FormHeader';
 import Input from '../components/dumb/Input';
 import Delimiter from '../components/dumb/Delimiter';
 import SubmitBtn from '../components/dumb/SubmitBtn';
@@ -134,7 +134,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
     return (
         <>
             { signUpError.display && <Redirect to='/login' />}
-            <ContentContainer>
+            <ContentContainer outer={true}>
                 <Form onSubmit={ handleSubmit }>
                     <FormTitle>Sign Up</FormTitle>
                     <FormHeader

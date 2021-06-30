@@ -1,20 +1,20 @@
-import React, { FunctionComponent, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { NavLink } from "react-router-dom";
+import React, { FunctionComponent, useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { NavLink } from 'react-router-dom';
 
 import * as apiService from '../common/apiService';
-import { SET_SIGN_UP_ERROR_DISPLAY } from "../redux/actions";
-import { ERRORS } from "../common/config/constants";
-import { RootState } from "../common/config/interfaces";
+import { SET_SIGN_UP_ERROR_DISPLAY } from '../redux/actions';
+import { ERRORS } from '../common/config/constants';
+import { RootState } from '../common/config/interfaces';
 
-import ContentContainer from "../components/dumb/ContentContainer";
-import Form from "../components/dumb/Form";
-import FormHeader from "../components/dumb/FormHeader";
-import FormTitle from "../components/dumb/FormTitle";
-import Input from "../components/dumb/Input";
-import InputError from "../components/dumb/InputError";
-import SubmitBtn from "../components/dumb/SubmitBtn";
-import ButtonLink from "../components/dumb/ButtonLink";
+import ContentContainer from '../components/dumb/ContentContainer';
+import Form from '../components/dumb/Form';
+import FormHeader from '../components/dumb/FormHeader';
+import FormTitle from '../components/dumb/Title';
+import Input from '../components/dumb/Input';
+import InputError from '../components/dumb/InputError';
+import SubmitBtn from '../components/dumb/SubmitBtn';
+import ButtonLink from '../components/dumb/ButtonLink';
 
 const SignIn: FunctionComponent = (): JSX.Element => {
 
@@ -99,7 +99,7 @@ const SignIn: FunctionComponent = (): JSX.Element => {
     };
 
     return (
-        <ContentContainer>
+        <ContentContainer outer={true}>
             <Form onSubmit={handleSubmit}>
                 <FormTitle>Sign In</FormTitle>
                 <FormHeader
@@ -136,7 +136,9 @@ const SignIn: FunctionComponent = (): JSX.Element => {
                     errorDisplay={ passwordError.display }
                     errorMessage={ passwordError.message }
                 />
-                <SubmitBtn type={'submit'} value='Sign In'/>
+                <NavLink to={'/personal-space'}>
+                    <SubmitBtn type={'submit'} value='Sign In'/>
+                </NavLink>
             </Form>
         </ContentContainer>
     )
