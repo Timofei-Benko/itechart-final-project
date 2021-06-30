@@ -16,7 +16,8 @@ router.route('/questions').get(async (_req: e.Request, res: e.Response, next: e.
 
 router.route('/questions').post(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
-        const { user: user }: { user: string } = req.body.question;
+        console.log(req.body)
+        const { user } = req.body.question;
         if (!await userService.exists({ _id: user })) {
             return res.status(404).json({error: 'User doesn\'t exist'});
         }
@@ -105,9 +106,9 @@ router.route('/questions/:questionId/answers/:answerId').put(validateSession, as
         if (!await questionService.answerExists({ _id: questionId }, answerId)) {
             return res.status(404).json({ error: 'Answer doesn\'t exist' });
         }
-        // if (await questionService.checkIfUserVoted(userId, questionId, answerId)) {
-        //     return res.status(403).json({ error: 'You have already voted for this answer' });
-        // }
+        if (scoreUpdateDirection && await questionService.checkIfUserVoted(userId, questionId, answerId)) {
+            return res.status(403).json({ error: 'You have already voted for this answer' });
+        }
         if (scoreUpdateDirection) {
             await questionService.updateAnswerScore(userId, questionId, answerId, scoreUpdateDirection);
         }
