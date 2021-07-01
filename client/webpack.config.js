@@ -43,7 +43,8 @@ module.exports = {
         new Dotenv(),
         new webpack.ProvidePlugin({
             Buffer: ['buffer', 'Buffer'],
-            process: 'process/browser'
+            process: 'process/browser',
+            assert: 'assert/'
         }),
     ],
     resolve: {
