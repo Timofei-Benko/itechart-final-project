@@ -29,7 +29,7 @@ const signIn = async (userData) => {
 
 const reauthenticate = async (userId) => {
     return API({
-        method: 'POST',
+        method: 'GET',
         url: routes.users.reauthenticate(userId),
     });
 }
@@ -44,9 +44,17 @@ const getUser = async (userId) => {
     });
 };
 
+const getAllQuestions = async (queryParam) => {
+    return API({
+        method: 'GET',
+        url: routes.questions.getAll(queryParam),
+    })
+}
+
 export {
     signUp,
     signIn,
     reauthenticate,
     getUser,
+    getAllQuestions,
 };
