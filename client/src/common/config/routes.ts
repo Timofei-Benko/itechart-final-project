@@ -7,7 +7,7 @@ export default {
         deleteOne: (userId) => `/users/${userId}`,
     },
     questions: {
-        getAll: (queryParams) => `/questions${queryParams}`,
+        getAll: (queryParams) => queryParams ? `/questions${queryParams}` : '/questions',
         create: `/questions`,
         getAllByUserId: (userId) => `/users/${userId}/questions`,
         getOne: (questionId) => `/questions/${questionId}`,
