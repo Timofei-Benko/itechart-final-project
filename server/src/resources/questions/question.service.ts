@@ -5,7 +5,13 @@ import userService = require('../users/user.service');
 
 const USER_FIELDS_TO_POPULATE = "_id firstName lastName username languages experience questionQty answerQty likedAnswerQty bestAnswerQty";
 
-const getAll = async (): Promise<Array<IQuestion>> => {
+const getAll = async (order?: string): Promise<Array<IQuestion>> => {
+    if (order === 'desc') {
+        return Question
+            .find()
+            .populate('user', USER_FIELDS_TO_POPULATE)
+            .sort({ updatedAt: 'desc' });
+    }
     return Question
         .find()
         .populate('user', USER_FIELDS_TO_POPULATE);
@@ -60,7 +66,8 @@ const addAnswer = async (filter: object, answer: IAnswer): Promise<IAnswer> => {
                 answers: answer,
             }
         }, {
-            new: true
+            new: true,
+            useFindAndModify: false
         })
         .populate({
             path: 'answers',
@@ -93,7 +100,7 @@ const updateAnswerScore = async (userId: string, questionId: string, answerId: s
         }, {
             arrayFilters: [{ 'answer._id': answerId }],
             new: true,
-            useFindAndModify: true,
+            useFindAndModify: false,
         }
     );
 
@@ -104,7 +111,7 @@ const updateAnswerScore = async (userId: string, questionId: string, answerId: s
             {
                 arrayFilters: [{ 'answer._id': answerId }],
                 new: true,
-                useFindAndModify: true,
+                useFindAndModify: false,
             }
         );
         await userService.updateStats(answer.userId, 'likedAnswerQty');
@@ -113,8 +120,8 @@ const updateAnswerScore = async (userId: string, questionId: string, answerId: s
 
 const checkIfUserVoted = async (userId: string, questionId: string, answerId: string): Promise<boolean> => {
     const question = await Question.findOne({ _id: questionId });
-    const answer = question.answers.find(answer => answer._id.toString() === answerId);
-    const foundUser = answer.usersVoted.find(id => id.toString() === userId);
+    const answer = question.answers.find(answer => answer._id.toString() === answerId.toString());
+    const foundUser = answer.usersVoted.find(id => id.toString() === userId.toString());
     return !!foundUser;
 }
 
@@ -128,9 +135,10 @@ const setIsBestStatus = async (questionId: string, answerId: string, value: stri
         }, {
             arrayFilters: [{ 'answer._id': answerId }],
             new: true,
+            useFindAndModify: false,
         }
     );
-    const userId = question.answers.find(answer => answer._id.toString() === answerId).user;
+    const userId = question.answers.find(answer => answer._id.toString() === answerId.toString()).user;
     await userService.updateStats(userId, 'bestAnswerQty');
 };
 

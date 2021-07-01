@@ -5,8 +5,13 @@ const questionService = require('./question.service');
 import userService = require('../users/user.service');
 import validateSession = require('../../middleware/validate.session');
 
-router.route('/questions').get(async (_req: e.Request, res: e.Response, next: e.NextFunction) => {
+router.route('/questions').get(async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
+        const order = req.query['order'];
+        if (order) {
+            const questions = await questionService.getAll(order);
+            return res.status(200).json({ questions });
+        }
         const questions = await questionService.getAll();
         return res.status(200).json({ questions });
     } catch (e) {
