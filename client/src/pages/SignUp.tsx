@@ -32,6 +32,8 @@ const SignUp: FunctionComponent = (): JSX.Element => {
         display: false,
     });
 
+    const [ redirect, setRedirect ] = useState<boolean>(false);
+
     const signUpError = useSelector((state: RootState) => state.signUpError);
     const dispatch = useDispatch();
 
@@ -90,11 +92,13 @@ const SignUp: FunctionComponent = (): JSX.Element => {
 
         try {
             await apiService.signUp(getRequestBody());
+            setRedirect(true);
         } catch(e) {
             if (e.response.status === 409) {
                 dispatch({
                     type: SET_SIGN_UP_ERROR,
                     payload: {
+                        status: true,
                         display: true,
                         message: ERRORS.ALREADY_SIGNED_UP,
                     },
@@ -133,7 +137,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
 
     return (
         <>
-            { signUpError.display && <Redirect to='/login' />}
+            { (signUpError.status || redirect) && <Redirect to='/login' />}
             <ContentContainer outer={true}>
                 <Form onSubmit={ handleSubmit }>
                     <FormTitle>Sign Up</FormTitle>

@@ -1,9 +1,9 @@
-import React, { FunctionComponent, useState } from 'react';
+import React, { FunctionComponent, useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
+import {NavLink, Redirect} from 'react-router-dom';
 
 import * as apiService from '../common/apiService';
-import { SET_SIGN_UP_ERROR_DISPLAY } from '../redux/actions';
+import { SET_SIGN_UP_ERROR_DISPLAY, SET_SIGN_UP_ERROR_STATUS } from '../redux/actions';
 import { ERRORS } from '../common/config/constants';
 import { RootState } from '../common/config/interfaces';
 
@@ -17,6 +17,8 @@ import SubmitBtn from '../components/dumb/SubmitBtn';
 import ButtonLink from '../components/dumb/ButtonLink';
 
 const SignIn: FunctionComponent = (): JSX.Element => {
+
+    const [ redirect, setRedirect ] = useState<boolean>(false);
 
     const [ signInData, setSignInData ] = useState<{ email: string, password: string }>({
        email: '',
@@ -36,6 +38,14 @@ const SignIn: FunctionComponent = (): JSX.Element => {
     const signUpError = useSelector((state: RootState) => state.signUpError);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+        // cleanup to allow coming back to sign up page
+        dispatch({
+            type: SET_SIGN_UP_ERROR_STATUS,
+            payload: false,
+        });
+    }, [ ]);
+
     const inputChangeHandler = (e): void => {
         // cleanup to remove errors
         setEmailError({
@@ -46,12 +56,12 @@ const SignIn: FunctionComponent = (): JSX.Element => {
         setPasswordError({
             ...passwordError,
             display: false,
-        })
+        });
 
         dispatch({
             type: SET_SIGN_UP_ERROR_DISPLAY,
             payload: false,
-        })
+        });
 
         let name: string = e.target.name;
         let value: string = e.target.value;
@@ -74,6 +84,7 @@ const SignIn: FunctionComponent = (): JSX.Element => {
         try {
             const response = await apiService.signIn(signInData);
             setDataToLS(response.data.token, response.data.user._id);
+            setRedirect(true)
         } catch (e) {
             if (e.response.status === 404) {
                 setEmailError({
@@ -100,6 +111,7 @@ const SignIn: FunctionComponent = (): JSX.Element => {
 
     return (
         <ContentContainer outer={true}>
+            { redirect && <Redirect to={'/personal-space'}/> }
             <Form onSubmit={handleSubmit}>
                 <FormTitle>Sign In</FormTitle>
                 <FormHeader
@@ -136,9 +148,7 @@ const SignIn: FunctionComponent = (): JSX.Element => {
                     errorDisplay={ passwordError.display }
                     errorMessage={ passwordError.message }
                 />
-                <NavLink to={'/personal-space'}>
-                    <SubmitBtn type={'submit'} value='Sign In'/>
-                </NavLink>
+                <SubmitBtn type={'submit'} value='Sign In'/>
             </Form>
         </ContentContainer>
     )
