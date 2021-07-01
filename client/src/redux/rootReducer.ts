@@ -8,7 +8,7 @@ const rootReducer = combineReducers(
     {
         signUpError: signUpErrorReducer,
         authenticationStatus: authenticationStatusReducer,
-        user: userReducer,
+        userState: userReducer,
     }
 );
 
