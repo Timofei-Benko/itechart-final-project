@@ -1,4 +1,4 @@
-import rootReducer from '../../redux/reducers/rootReducer';
+import rootReducer from '../../redux/rootReducer';
 
 export interface ISignUpUserData {
     firstName?: string,
