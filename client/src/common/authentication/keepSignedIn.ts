@@ -2,7 +2,7 @@ import JWT, { JwtPayload } from 'jsonwebtoken';
 
 import isTokenValid from './isTokenValid';
 import isSignedIn from "./isSignedIn";
-import * as apiService from "../apiService";
+import * as apiService from '../apiService';
 
 export default async (): Promise<void> => {
     if (isSignedIn()) {
