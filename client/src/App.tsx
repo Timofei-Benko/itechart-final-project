@@ -6,7 +6,6 @@ import setUserState from './redux/setUserState'
 
 import keepSignedIn from './common/authentication/keepSignedIn';
 import isSignedIn from "./common/authentication/isSignedIn";
-import { RootState } from "./common/config/interfaces";
 
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
@@ -18,11 +17,11 @@ import GlobalStyle from "./components/dumb/GlobalStyle";
 const App: FunctionComponent = (): JSX.Element => {
 
     useEffect(() => {
+        keepSignedIn();
+
         if (isSignedIn()) {
             store.dispatch(setUserState());
         }
-
-        keepSignedIn();
     }, []);
 
     return (
