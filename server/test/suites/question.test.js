@@ -285,41 +285,41 @@ describe('Question suite', () => {
             expect(userResponseBody.user.bestAnswerQty).to.be.greaterThan(0);
         });
 
-        it(`should set isLiked field in answer subdocument to true 
-        and update likedAnswerQty field in corresponding user document`,async () => {
-
-            const initUserResponse = await request(userRoutes.getOne(userId), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-            const initUser = await initUserResponse.json();
-            const { questionId, answerId } = await bumpAnswerScoreToTen(initUser.user._id, token);
-
-            const questionResponse = await request(questionRoutes.getOne(questionId), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-            const questionResponseBody = await questionResponse.json();
-
-            const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId.toString());
-
-            const updatedUserResponse = await request(userRoutes.getOne(userId), {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-            });
-
-            const updatedUser = await updatedUserResponse.json();
-
-            expect(answer.isLiked).to.equal(true);
-            expect(updatedUser.user.likedAnswerQty).to.be.greaterThan(0);
-        });
+        // it(`should set isLiked field in answer subdocument to true
+        // and update likedAnswerQty field in corresponding user document`,async () => {
+        //
+        //     const initUserResponse = await request(userRoutes.getOne(userId), {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': `Bearer ${token}`
+        //         },
+        //     });
+        //
+        //     const initUser = await initUserResponse.json();
+        //     const { questionId, answerId } = await bumpAnswerScoreToTen(initUser.user._id, token);
+        //
+        //     const questionResponse = await request(questionRoutes.getOne(questionId), {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': `Bearer ${token}`
+        //         },
+        //     });
+        //
+        //     const questionResponseBody = await questionResponse.json();
+        //
+        //     const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId.toString());
+        //
+        //     const updatedUserResponse = await request(userRoutes.getOne(userId), {
+        //         headers: {
+        //             'Content-Type': 'application/json',
+        //             'Authorization': `Bearer ${token}`
+        //         },
+        //     });
+        //
+        //     const updatedUser = await updatedUserResponse.json();
+        //
+        //     expect(answer.isLiked).to.equal(true);
+        //     expect(updatedUser.user.likedAnswerQty).to.be.greaterThan(0);
+        // });
     });
 });
