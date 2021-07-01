@@ -2,7 +2,7 @@ const expect = require('chai').expect;
 const request = require('node-fetch');
 const questionRoutes = require('../config/routes').questions;
 const userRoutes = require('../config/routes').users;
-const addTenToScore = require('../config/addTenToAnswerScore');
+const bumpAnswerScoreToTen = require('../config/setAnswerScore');
 
 const TEST_USER_DATA = {
     user: {
@@ -25,7 +25,8 @@ const TEST_QUESTION_DATA = {
         content: 'TEST_QUESTION',
     },
     answer: {
-        content: 'TEST_ANSWER'
+        content: 'TEST_ANSWER',
+        score: 9,
     },
 };
 
@@ -287,27 +288,38 @@ describe('Question suite', () => {
         it(`should set isLiked field in answer subdocument to true 
         and update likedAnswerQty field in corresponding user document`,async () => {
 
-            await addTenToScore(questionId, answerId, token);
+            const initUserResponse = await request(userRoutes.getOne(userId), {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+            });
+
+            const initUser = await initUserResponse.json();
+            const { questionId, answerId } = await bumpAnswerScoreToTen(initUser.user._id, token);
 
             const questionResponse = await request(questionRoutes.getOne(questionId), {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`
                 },
             });
-            const questionResponseBody = await questionResponse.json();
-            const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId);
 
-            const userResponse = await request(userRoutes.getOne(userId), {
+            const questionResponseBody = await questionResponse.json();
+
+            const answer = questionResponseBody.question.answers.find(answer => answer._id.toString() === answerId.toString());
+
+            const updatedUserResponse = await request(userRoutes.getOne(userId), {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    'Authorization': `Bearer ${token}`
                 },
             });
-            const userResponseBody = await userResponse.json();
+
+            const updatedUser = await updatedUserResponse.json();
 
             expect(answer.isLiked).to.equal(true);
-            expect(userResponseBody.user.likedAnswerQty).to.be.greaterThan(0);
+            expect(updatedUser.user.likedAnswerQty).to.be.greaterThan(0);
         });
     });
 });
