@@ -10,7 +10,8 @@ export default styled.button`
   font-weight: bold;
   border: 1px solid lightgray;
   border-radius: 10px;
-  transition: all .2s ease-in-out;
+  transition: all .1s ease-in-out;
+  text-transform: capitalize;
 
   :focus {
     outline: none;
