@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useRef, useEffect } from 'react';
+import React, { FunctionComponent, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import styled from 'styled-components/macro';
