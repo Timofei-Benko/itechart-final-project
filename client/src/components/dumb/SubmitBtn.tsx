@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export default styled.input`
-  max-width: 100%;
+  width: 100%;
   padding: 11px 13px;
   background-color: transparent;
   box-shadow: 4px 4px 0 gray;
@@ -11,7 +11,7 @@ export default styled.input`
   border-radius: 10px;
   font-weight: bold;
   color: black;
-  transition: all .2s ease-in-out;
+  transition: all .1s ease-in-out;
 
   :is(:hover, :focus) {
     transform: translateY(4px) translateX(4px);
@@ -22,4 +22,4 @@ export default styled.input`
   :focus {
     background-color: rgba(162, 241, 162, 0.67);
   }
-`
+`;
