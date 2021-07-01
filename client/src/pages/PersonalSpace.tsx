@@ -1,7 +1,7 @@
 import React, { FunctionComponent, useRef, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import styled from 'styled-components';
+import styled from 'styled-components/macro';
 
 import isSignedIn from '../common/authentication/isSignedIn';
 import { RootState } from '../common/config/interfaces';
@@ -14,7 +14,7 @@ import Delimiter from '../components/dumb/Delimiter';
 const PersonalSpaceContainer = styled.div`
   padding: 2rem;
   width: 100%;
-  height: 100vh;
+  height: 100%;
   background-color: #FFFFFF;
 `;
 
@@ -50,7 +50,7 @@ const PersonalSpace: FunctionComponent = (): JSX.Element => {
             :
             <>
                 <Header />
-                <ContentContainer outer={true}>
+                <ContentContainer inner={true}>
                     <PersonalSpaceContainer>
                         <Title>Account information</Title>
                         <TextContainer>

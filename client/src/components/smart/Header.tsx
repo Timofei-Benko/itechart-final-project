@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from "react";
-import styled from "styled-components";
+import styled from 'styled-components/macro';
 import { NavLink } from 'react-router-dom';
 
 import isSignedIn from "../../common/authentication/isSignedIn";

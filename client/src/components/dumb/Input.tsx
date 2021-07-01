@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components/macro';
 import { INPUT_HEIGHT } from '../constants';
 
 // @ts-ignore
