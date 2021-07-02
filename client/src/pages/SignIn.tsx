@@ -110,7 +110,7 @@ const SignIn: FunctionComponent = (): JSX.Element => {
     };
 
     return (
-        <ContentContainer outer={true}>
+        <ContentContainer height='100vh'>
             { redirect && <Redirect to={'/personal-space'}/> }
             <Form onSubmit={handleSubmit}>
                 <FormTitle>Sign In</FormTitle>

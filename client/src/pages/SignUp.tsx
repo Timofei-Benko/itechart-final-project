@@ -138,7 +138,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
     return (
         <>
             { (signUpError.status || redirect) && <Redirect to='/login' />}
-            <ContentContainer outer={true}>
+            <ContentContainer height={'100vh'}>
                 <Form onSubmit={ handleSubmit }>
                     <FormTitle>Sign Up</FormTitle>
                     <FormHeader
