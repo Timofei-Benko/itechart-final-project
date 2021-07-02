@@ -49,7 +49,17 @@ const getAllQuestions = async (queryParam) => {
         method: 'GET',
         url: routes.questions.getAll(queryParam),
     })
-}
+};
+
+const getAllUserQuestions = async (userId, queryParam) => {
+    return API({
+        method: 'GET',
+        url: routes.questions.getAllByUserId(userId, queryParam),
+        headers: {
+            'Authorization': `Bearer ${token}`
+        }
+    })
+};
 
 export {
     signUp,
@@ -57,4 +67,5 @@ export {
     reauthenticate,
     getUser,
     getAllQuestions,
+    getAllUserQuestions,
 };
