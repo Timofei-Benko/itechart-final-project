@@ -8,12 +8,14 @@ import ContentContainer from "../dumb/ContentContainer";
 import ButtonLink from "../dumb/ButtonLink";
 import Title from "../dumb/Title";
 
+import { HEADER_HEIGHT } from '../constants';
+
 const Nav = styled.nav`
   position: relative;
   z-index: 1000;
   display: flex;
   width: 100%;
-  height: 100px;
+  height: ${HEADER_HEIGHT};
   justify-content: center;
   background-color: #FFFFFF;
   -webkit-box-shadow: 2px 9px 34px 0px #999999;
@@ -36,7 +38,7 @@ const ButtonContainer = styled.div`
   max-width: 400px;
 `;
 
-const NavTitle = styled(Title)`
+const Logo = styled(Title)`
   font-size: 2rem;
   color: pink;
   letter-spacing: 1px;
@@ -48,7 +50,7 @@ const Header: FunctionComponent = (): JSX.Element => {
             <ContentContainer>
                 <NavContainer>
                     <>
-                        <NavTitle>Not stack overflow</NavTitle>
+                        <Logo>Not stack overflow</Logo>
                     </>
                     <>
                         <ButtonContainer>
