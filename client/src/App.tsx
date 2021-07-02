@@ -2,7 +2,7 @@ import React, { FunctionComponent, useEffect, useRef } from "react";
 import { BrowserRouter as Router, Redirect, Route, Switch } from "react-router-dom";
 
 import store from "./redux/store";
-import setUserState from './redux/hooks/useUserStore'
+import useUserStore from './redux/hooks/useUserStore';
 
 import keepSignedIn from './common/authentication/keepSignedIn';
 import isSignedIn from "./common/authentication/isSignedIn";
@@ -20,7 +20,8 @@ const App: FunctionComponent = (): JSX.Element => {
         keepSignedIn();
 
         if (isSignedIn()) {
-            store.dispatch(setUserState());
+            store.dispatch(useUserStore());
+            // store.dispatch(useUserQuestionStore());
         }
     }, []);
 
