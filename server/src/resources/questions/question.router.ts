@@ -36,8 +36,13 @@ router.route('/questions').post(validateSession, async (req: e.Request, res: e.R
 router.route('/users/:userId/questions').get(validateSession, async (req: e.Request, res: e.Response, next: e.NextFunction) => {
     try {
         const { userId } = req.params;
+        const order = req.query['order'];
         if (!await userService.exists({ _id: userId })) {
             return res.status(404).json({ error: 'User doesn\'t exist' });
+        }
+        if (order) {
+            const questions = await questionService.getAllUserQuestions({ user: userId }, order);
+            return res.status(200).json({ questions });
         }
         const questions: Array<IQuestion> = await questionService.getAllUserQuestions({ user: userId });
         return res.status(200).json({ questions: questions });

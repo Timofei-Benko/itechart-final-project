@@ -33,7 +33,13 @@ const answerExists = async (questionFilter: object, answerId: string): Promise<b
     return !!answer;
 }
 
-const getAllUserQuestions = async (filter: object): Promise<Array<IQuestion>> => {
+const getAllUserQuestions = async (filter: object, order?: string): Promise<Array<IQuestion>> => {
+    if (order === 'desc') {
+        return Question
+            .find(filter)
+            .populate('user', USER_FIELDS_TO_POPULATE)
+            .sort({ updatedAt: 'desc' });
+    }
     return Question
         .find(filter)
         .populate('user', USER_FIELDS_TO_POPULATE);
