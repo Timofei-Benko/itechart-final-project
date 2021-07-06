@@ -50,7 +50,7 @@ const QuestionInfoItem = styled.span`
   font-size: 1rem;
 `;
 
-const Questions = (props: { questionsState: IQuestionsState, withUserName?: boolean }): JSX.Element => {
+const Questions = (props: { questionsState: IQuestionsState | React.MutableRefObject<IQuestionsState>, withUserName?: boolean }): JSX.Element => {
 
     const { questionsState, withUserName } = props;
 
@@ -105,7 +105,7 @@ const Questions = (props: { questionsState: IQuestionsState, withUserName?: bool
                                         By:
                                     </QuestionInfoTitle>
                                     <QuestionInfoItem>
-                                        { question.user.username || `${question.user.firstName} ${question.user.lastName}` }
+                                        { question.user ? question.user.username || `${question.user.firstName} ${question.user.lastName}` : 'unknown' }
                                     </QuestionInfoItem>
                                 </QuestionInfo>
                             }

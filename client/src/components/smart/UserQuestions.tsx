@@ -13,6 +13,7 @@ const UserQuestionsContainer = styled.div``;
 const UserQuestions: FunctionComponent = (): JSX.Element => {
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         store.dispatch(useUserQuestionStore());
     }, []);
 

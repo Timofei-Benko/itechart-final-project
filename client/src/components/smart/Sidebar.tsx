@@ -6,6 +6,7 @@ const Aside = styled.aside`
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: .5rem;
   padding-right: 2rem;
   margin-right: 2rem;
   max-width: max-content;
@@ -27,7 +28,7 @@ const Aside = styled.aside`
     &:after {
       content: '';
       position: absolute;
-      bottom: 10px;
+      bottom: 0;
       display: block;
       height: 3px;
       width: 100%;

@@ -1,4 +1,5 @@
 import rootReducer from '../../redux/rootReducer';
+import React from "react";
 
 export interface ISignUpUserData {
     firstName?: string,
@@ -14,11 +15,11 @@ export interface ISignUpUserData {
 
 export type RootState = ReturnType<typeof rootReducer>;
 
-export interface IQuestionsState {
-    current: {
+export interface IQuestionsState extends React.MutableRefObject<any>{
+
         loading: boolean,
-        data: Array<any>,
+        data: Array<Record<string, any>>,
         error: string,
-    }
+
 }
 
