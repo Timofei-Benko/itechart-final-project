@@ -54,7 +54,7 @@ const Header: FunctionComponent = (): JSX.Element => {
                     </>
                     <>
                         <ButtonContainer>
-                            <NavLink to={'/questions'}>
+                            <NavLink to={'/home'}>
                                 <ButtonLink>Questions</ButtonLink>
                             </NavLink>
                             {

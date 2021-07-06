@@ -6,11 +6,11 @@ const Aside = styled.aside`
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: .5rem;
   padding-right: 2rem;
   margin-right: 2rem;
   max-width: max-content;
   border-right: 2px solid gray;
-  align-content: stretch;
 
   a {
     position: relative;
@@ -19,15 +19,16 @@ const Aside = styled.aside`
     height: 40px;
     color: black;
     transition: color .2s ease-in-out;
+    white-space: nowrap;
 
     &:visited {
       color: initial;
     }
 
     &:after {
-      position: absolute;
-      bottom: 10px;
       content: '';
+      position: absolute;
+      bottom: 0;
       display: block;
       height: 3px;
       width: 100%;
@@ -65,7 +66,7 @@ const Sidebar =  (props): JSX.Element => {
             <Link
                 to={`${path}/questions`}
                 className={isQuestionsTabActive ? 'active' : ''}
-            >Questions
+            >My Questions
             </Link>
         </Aside>
     );
