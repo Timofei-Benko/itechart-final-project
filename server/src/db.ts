@@ -10,13 +10,13 @@ module.exports = async (): Promise<void> => {
                 useUnifiedTopology: true,
                 useCreateIndex: true,
             },
-            () => console.log("Mongoose is connected"),
+            () => console.log('Mongoose is connected'),
         );
     } catch (e) {
-        console.log("Mongoose was unable to connect", e);
+        console.log('Mongoose was unable to connect', e);
     }
 
     const dbConnection = mongoose.connection;
-    dbConnection.on("error", (err) => console.log(`Connection error ${err}`));
-    dbConnection.once("open", () => console.log("Connected to DB!"));
+    dbConnection.on('error', (err) => console.log(`Connection error ${err}`));
+    dbConnection.once('open', () => console.log('Connected to DB!'));
 };
