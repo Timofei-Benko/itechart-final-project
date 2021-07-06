@@ -7,24 +7,23 @@ import useQuestionStore from '../redux/hooks/useQuestionStore';
 import Header from '../components/smart/Header';
 import Questions from '../components/smart/Questions';
 import Spinner from '../components/dumb/Spinner';
+import ContentContainer from "../components/dumb/ContentContainer";
 
 import { HEADER_HEIGHT } from '../components/constants';
-import { RootState } from '../common/config/interfaces';
+import { RootState, IQuestionsState } from '../common/config/interfaces';
 
 const HomeContainer = styled.div`
   height: calc(100% - ${HEADER_HEIGHT});
 `;
 
-const HomeQuestionContainer = styled.div`
-`;
-
 const Home: FunctionComponent = (): JSX.Element => {
 
     const initQuestionsState = useSelector((state: RootState) => state.questionsState);
-    const questionsState = useRef(initQuestionsState);
+    const questionsState: React.MutableRefObject<IQuestionsState & { loading: boolean }> = useRef(initQuestionsState);
     questionsState.current = initQuestionsState;
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/rules-of-hooks
         store.dispatch(useQuestionStore());
     }, [])
 
@@ -38,9 +37,9 @@ const Home: FunctionComponent = (): JSX.Element => {
                 <>
                     <Header />
                     <HomeContainer>
-                        <HomeQuestionContainer>
-                            <Questions questionsState={questionsState} withUserName />
-                        </HomeQuestionContainer>
+                        <ContentContainer>
+                            <Questions questionsState={questionsState} withUserName/>
+                        </ContentContainer>
                     </HomeContainer>
                 </>
             }

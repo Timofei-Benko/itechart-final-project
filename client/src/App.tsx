@@ -21,6 +21,7 @@ const App: FunctionComponent = (): JSX.Element => {
         keepSignedIn();
 
         if (isSignedIn()) {
+            // eslint-disable-next-line react-hooks/rules-of-hooks
             store.dispatch(useUserStore());
         }
     }, []);
