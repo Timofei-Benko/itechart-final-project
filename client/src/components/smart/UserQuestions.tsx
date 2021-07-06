@@ -1,10 +1,14 @@
-import React, {FunctionComponent, useRef, useEffect, useCallback} from 'react';
+import React, { FunctionComponent, useRef, useEffect } from 'react';
 import store from '../../redux/store';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 
+import Questions from './Questions';
+
 import useUserQuestionStore from '../../redux/hooks/useUserQuestionStore';
 import { RootState } from '../../common/config/interfaces';
+
+const UserQuestionsContainer = styled.div``;
 
 const UserQuestions: FunctionComponent = (): JSX.Element => {
 
@@ -17,8 +21,10 @@ const UserQuestions: FunctionComponent = (): JSX.Element => {
     userQuestionState.current = initUserQuestionState;
 
     return (
-        <h1>Henlo</h1>
-    )
+        <UserQuestionsContainer>
+            <Questions questionsState={ userQuestionState } withUserName/>
+        </UserQuestionsContainer>
+    );
 };
 
 export default UserQuestions;

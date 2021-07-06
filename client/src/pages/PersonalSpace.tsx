@@ -20,16 +20,18 @@ const PersonalSpaceContainer = styled.div`
   display: flex;
   margin: 2rem;
   padding: 2rem;
-  min-height: 650px;
+  height: 650px;
   width: 100%;
   border-radius: 15px;
-  height: calc(100% - ${HEADER_HEIGHT});
   background-color: #FFFFFF;
   box-shadow: ${BOX_SHADOW};
   transition: all .2s ease-in-out;
 `;
 
-const PSContentContainer = styled.div``;
+const PSContentContainer = styled.div`
+  width: 100%;
+  overflow: scroll;
+`;
 
 const PersonalSpace: FunctionComponent = (): JSX.Element => {
 

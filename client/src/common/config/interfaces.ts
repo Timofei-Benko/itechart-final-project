@@ -13,3 +13,12 @@ export interface ISignUpUserData {
 }
 
 export type RootState = ReturnType<typeof rootReducer>;
+
+export interface IQuestionsState {
+    current: {
+        loading: boolean,
+        data: Array<any>,
+        error: string,
+    }
+}
+
