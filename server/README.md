@@ -22,7 +22,7 @@ npm run prod
 ```
 npm run build
 ```
-4. To check the code with ESLint:
+4. To run ESLint (won't fix anything):
 
 ```
 npm run lint
@@ -33,10 +33,12 @@ npm run lint
 npm run test
 ```
 
-6. To run a specific test suite. Accepts one of the following parameters:
-* ```user```
-* ```question```
-* ```auth```
+6. To run a specific test suite:
+
 ```
 npm run test:<test-suite-name>
 ```
+Accepts one of the following parameters:
+* ```user```
+* ```question```
+* ```auth```
