@@ -14,6 +14,7 @@ import { RootState, IQuestionsState } from '../common/config/interfaces';
 
 const HomeContainer = styled.div`
   height: calc(100% - ${HEADER_HEIGHT});
+  background: #FFFFFF;
 `;
 
 const Home: FunctionComponent = (): JSX.Element => {
@@ -36,11 +37,11 @@ const Home: FunctionComponent = (): JSX.Element => {
                     :
                 <>
                     <Header />
-                    <HomeContainer>
-                        <ContentContainer>
+                    <ContentContainer>
+                        <HomeContainer>
                             <Questions questionsState={questionsState} withUserName/>
-                        </ContentContainer>
-                    </HomeContainer>
+                        </HomeContainer>
+                    </ContentContainer>
                 </>
             }
         </>
