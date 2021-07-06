@@ -3,7 +3,7 @@ import IQuestion = require('./question.interface');
 import IAnswer = require('./answer.interface');
 import userService = require('../users/user.service');
 
-const USER_FIELDS_TO_POPULATE = "_id firstName lastName username languages experience questionQty answerQty likedAnswerQty bestAnswerQty";
+const USER_FIELDS_TO_POPULATE = '_id firstName lastName username languages experience questionQty answerQty likedAnswerQty bestAnswerQty';
 
 const getAll = async (order?: string): Promise<Array<IQuestion>> => {
     if (order === 'desc') {
