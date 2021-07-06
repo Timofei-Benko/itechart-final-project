@@ -26,6 +26,10 @@ module.exports = {
             {
                 test: /\.css$/,
                 use: [{ loader: 'style-loader' }, { loader: 'css-loader' }]
+            },
+            {
+                test: /\.svg$/,
+                loader: 'file-loader',
             }
         ],
     },
@@ -37,8 +41,9 @@ module.exports = {
         //     },
         // }),
         new HtmlWebpackPlugin({
-            title: "Not Stack Overflow",
-            template: './public/index.html'
+            title: 'Not Stack Overflow',
+            template: './public/index.html',
+            favicon: './public/favicon.svg',
         }),
         new Dotenv(),
         new webpack.ProvidePlugin({
