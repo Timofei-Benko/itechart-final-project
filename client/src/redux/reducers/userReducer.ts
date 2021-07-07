@@ -1,12 +1,12 @@
 import { SET_USER_DATA_LOADING, SET_USER_DATA_SUCCESS, SET_USER_DATA_ERROR } from "../actions";
 
-const initState = {
+const initState: Record<string, boolean | string | Record<string, any>> = {
     loading: false,
     error: '',
     data: {},
 };
 
-export default (state = initState, action) => {
+export default (state = initState, action: { type: string, payload: any }): typeof initState=> {
     const { type, payload } = action;
 
     switch (type) {

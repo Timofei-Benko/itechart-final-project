@@ -1,12 +1,12 @@
 import { SET_SIGN_UP_ERROR, SET_SIGN_UP_ERROR_MESSAGE, SET_SIGN_UP_ERROR_DISPLAY, SET_SIGN_UP_ERROR_STATUS } from "../actions";
 
-const initState = {
+const initState: Record<string, boolean | string | Record<string, any>> = {
     status: false,
     display: false,
     message: '',
 };
 
-export default (state = initState, action) => {
+export default (state = initState, action: { type: string, payload: any }): typeof initState => {
     const { type, payload } = action;
 
     switch (type) {
