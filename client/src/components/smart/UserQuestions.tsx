@@ -23,7 +23,7 @@ const UserQuestions: FunctionComponent = (): JSX.Element => {
 
     return (
         <UserQuestionsContainer>
-            <Questions questionsState={ userQuestionState } withUserName/>
+            <Questions questionsState={ userQuestionState } />
         </UserQuestionsContainer>
     );
 };
