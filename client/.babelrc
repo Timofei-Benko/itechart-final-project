@@ -7,6 +7,9 @@
   "plugins": [
     ["@babel/plugin-transform-runtime", { "regenerator": true }],
     "macros",
-    ["babel-plugin-styled-components"]
+    ["babel-plugin-styled-components"],
+    ["@babel/plugin-transform-spread", {
+      "loose": true
+    }]
   ]
 }
