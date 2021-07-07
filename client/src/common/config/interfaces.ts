@@ -16,10 +16,7 @@ export interface ISignUpUserData {
 export type RootState = ReturnType<typeof rootReducer>;
 
 export interface IQuestionsState extends React.MutableRefObject<any>{
-
         loading: boolean,
         data: Array<Record<string, any>>,
         error: string,
-
 }
-
