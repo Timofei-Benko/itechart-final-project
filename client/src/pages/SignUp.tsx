@@ -23,7 +23,7 @@ import ButtonLink from '../components/dumb/ButtonLink';
 
 const SignUp: FunctionComponent = (): JSX.Element => {
 
-    const [userData, setUserData] = useState<ISignUpUserData>({});
+    const [userData, setUserData] = useState<Partial<ISignUpUserData>>({});
 
     const [languageList, setLanguageList] = useState<Array<{ value?: string, label?: string}>>([]);
 
@@ -46,7 +46,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
             username,
             position,
             experience
-        } = userData;
+        } = userData as Omit<ISignUpUserData, 'passwordConfirmation'>
 
         return {
             firstName,
@@ -56,7 +56,7 @@ const SignUp: FunctionComponent = (): JSX.Element => {
             username,
             position,
             experience,
-            languages: languageList.map(el => el.value),
+            languages: languageList.map(el => el.value)
         };
     };
 
@@ -108,8 +108,8 @@ const SignUp: FunctionComponent = (): JSX.Element => {
     };
 
     const inputChangeHandler = (e): void => {
-        let name: string = e.target.name;
-        let value: string = e.target.value;
+        const name: string = e.target.name;
+        const value: string = e.target.value;
 
         if (name === 'experience') {
             const experience: number | undefined = parseInt(value);

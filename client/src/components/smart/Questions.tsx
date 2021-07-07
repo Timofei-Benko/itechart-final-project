@@ -50,7 +50,7 @@ const QuestionInfoItem = styled.span`
   font-size: 1rem;
 `;
 
-const Questions = (props: { questionsState: IQuestionsState | React.MutableRefObject<IQuestionsState>, withUserName?: boolean }): JSX.Element => {
+const Questions = (props: { questionsState: React.MutableRefObject<any>, withUserName?: boolean }): JSX.Element => {
 
     const { questionsState, withUserName } = props;
 

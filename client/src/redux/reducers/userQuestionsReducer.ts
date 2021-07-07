@@ -3,6 +3,7 @@ import {
     SET_USER_QUESTION_DATA_LOADING,
     SET_USER_QUESTION_DATA_SUCCESS,
 } from '../actions';
+import { IQuestionsState } from '../../common/config/interfaces';
 
 const initState: Record<string, boolean | string | Record<string, any>> = {
     loading: false,

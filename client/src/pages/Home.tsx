@@ -20,7 +20,7 @@ const HomeContainer = styled.div`
 const Home: FunctionComponent = (): JSX.Element => {
 
     const initQuestionsState = useSelector((state: RootState) => state.questionsState);
-    const questionsState: React.MutableRefObject<IQuestionsState & { loading: boolean }> = useRef(initQuestionsState);
+    const questionsState = useRef(initQuestionsState);
     questionsState.current = initQuestionsState;
 
     useEffect(() => {

@@ -2,7 +2,7 @@ import React, { FunctionComponent, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 
-import { RootState } from '../../common/config/interfaces';
+import { IUserData, RootState } from '../../common/config/interfaces';
 
 import Delimiter from '../dumb/Delimiter';
 
@@ -58,7 +58,7 @@ const UserInformation: FunctionComponent = (): JSX.Element => {
         answerQty,
         likedAnswerQty,
         bestAnswerQty
-    } = userState.current.data;
+    } = userState.current.data as IUserData;
 
     return (
         <>
