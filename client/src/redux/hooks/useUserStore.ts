@@ -1,7 +1,7 @@
 import * as apiService from '../../common/apiService';
 import { SET_USER_DATA_LOADING, SET_USER_DATA_SUCCESS, SET_USER_DATA_ERROR } from "../actions";
 
-export default function useUserStore() {
+export default function useUserStore(): (dispatch) => Promise<void> {
     return async dispatch => {
         dispatch({
             type: SET_USER_DATA_LOADING,
@@ -24,4 +24,4 @@ export default function useUserStore() {
             });
         }
     };
-};
+}

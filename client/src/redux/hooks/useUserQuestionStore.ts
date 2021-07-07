@@ -5,7 +5,7 @@ import {
     SET_USER_QUESTION_DATA_ERROR,
 } from "../actions";
 
-export default function useUserQuestionStore() {
+export default function useUserQuestionStore(): (dispatch) => Promise<void> {
     return async dispatch => {
         dispatch({
             type: SET_USER_QUESTION_DATA_LOADING,
@@ -28,4 +28,4 @@ export default function useUserQuestionStore() {
             });
         }
     };
-};
+}
