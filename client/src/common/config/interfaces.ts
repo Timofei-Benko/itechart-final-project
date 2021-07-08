@@ -27,3 +27,7 @@ export interface IQuestionsState extends React.MutableRefObject<any> {
         data: Array<Record<string, any>>,
         error: string,
 }
+
+export interface IRoutes {
+    [key: string]: Record<string, ((...args: string[]) => string)>;
+}
