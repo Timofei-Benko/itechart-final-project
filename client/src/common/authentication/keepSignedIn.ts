@@ -6,7 +6,7 @@ import * as apiService from '../apiService';
 
 export default async (): Promise<void> => {
     if (isSignedIn()) {
-        const userId = localStorage.getItem('user_id');
+        const userId = localStorage.getItem('user_id') as string;
         const token = localStorage.getItem('token');
         const decoded = JWT.decode(token as string) as JwtPayload;
 
