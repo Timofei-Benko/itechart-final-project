@@ -43,9 +43,7 @@ const UserInformation: FunctionComponent = (): JSX.Element => {
     const initUserState = useSelector((state: RootState) => state.userState);
     const userState = useRef(initUserState);
     userState.current = initUserState;
-
-    console.log(userState);
-
+    
     const {
         firstName,
         lastName,

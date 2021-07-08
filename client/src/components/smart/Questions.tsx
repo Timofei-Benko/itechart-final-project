@@ -54,8 +54,6 @@ const Questions = (props: { questionsState: React.MutableRefObject<any>, withUse
 
     const { questionsState, withUserName } = props;
 
-    console.log(questionsState);
-
     return (
         questionsState.current.loading
             ?
