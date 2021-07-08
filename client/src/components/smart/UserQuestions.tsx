@@ -5,7 +5,7 @@ import styled from 'styled-components/macro';
 
 import Questions from './Questions';
 
-import useUserQuestionStore from '../../redux/hooks/useUserQuestionStore';
+import userQuestionStore from '../../redux/hooks/useUserQuestionStore';
 import { RootState } from '../../common/config/interfaces';
 
 const UserQuestionsContainer = styled.div``;
@@ -14,7 +14,7 @@ const UserQuestions: FunctionComponent = (): JSX.Element => {
 
     useEffect(() => {
         // eslint-disable-next-line react-hooks/rules-of-hooks
-        store.dispatch(useUserQuestionStore());
+        store.dispatch(userQuestionStore());
     }, []);
 
     const initUserQuestionState = useSelector((state: RootState) => state.userQuestionState);
