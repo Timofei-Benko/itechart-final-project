@@ -12,7 +12,7 @@ const API = axios.create({
 const signUp = async (userData: ISignUpUserData): Promise<AxiosResponse> => {
     return API({
         method: 'POST',
-        url: routes.users.signUp as unknown as string,
+        url: routes.users.signUp(),
         data: {
             user: userData,
         },
@@ -22,7 +22,7 @@ const signUp = async (userData: ISignUpUserData): Promise<AxiosResponse> => {
 const signIn = async (userData: { email: string, password: string }): Promise<AxiosResponse> => {
     return API({
         method: 'POST',
-        url: routes.users.signIn as unknown as string,
+        url: routes.users.signIn(),
         data: {
             user: userData,
         },
