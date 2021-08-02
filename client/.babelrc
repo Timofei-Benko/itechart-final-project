@@ -5,11 +5,21 @@
     "@babel/preset-typescript"
   ],
   "plugins": [
-    ["@babel/plugin-transform-runtime", { "regenerator": true }],
+    [
+      "@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ],
     "macros",
-    ["babel-plugin-styled-components"],
-    ["@babel/plugin-transform-spread", {
-      "loose": true
-    }]
+    [
+      "babel-plugin-styled-components"
+    ],
+    [
+      "@babel/plugin-transform-spread",
+      {
+        "loose": true
+      }
+    ]
   ]
 }

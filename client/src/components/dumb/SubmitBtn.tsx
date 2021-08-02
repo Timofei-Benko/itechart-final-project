@@ -11,14 +11,14 @@ export default styled.input`
   border-radius: 10px;
   font-weight: bold;
   color: black;
-  transition: all .1s ease-in-out;
+  transition: all 0.1s ease-in-out;
 
   :is(:hover, :focus) {
     transform: translateY(4px) translateX(4px);
     box-shadow: none;
     cursor: pointer;
   }
-  
+
   :focus {
     background-color: rgba(162, 241, 162, 0.67);
   }

@@ -39,81 +39,66 @@ const QuestionInfoContainer = styled.div`
 `;
 
 const QuestionInfo = styled.div`
-    margin-top: .5rem;
+  margin-top: 0.5rem;
 `;
 
-const QuestionInfoTitle = styled.h4`
-`;
+const QuestionInfoTitle = styled.h4``;
 
 const QuestionInfoItem = styled.span`
   display: block;
   font-size: 1rem;
 `;
 
-const Questions = (props: { questionsState: React.MutableRefObject<any>, withUserName?: boolean }): JSX.Element => {
+const Questions = (props: {
+  questionsState: React.MutableRefObject<any>;
+  withUserName?: boolean;
+}): JSX.Element => {
+  const { questionsState, withUserName } = props;
 
-    const { questionsState, withUserName } = props;
+  return questionsState.current.loading ? (
+    <Spinner />
+  ) : (
+    <QuestionContainer>
+      {questionsState.current.data.map((question) => (
+        <Question key={uuid()} onClick={() => console.log(question._id)}>
+          <QuestionTitle>{question.title}</QuestionTitle>
 
-    return (
-        questionsState.current.loading
-            ?
-        <Spinner />
-            :
-        <QuestionContainer>
-            {
-                questionsState.current.data.map(question => (
-                    <Question key={ uuid() } onClick={() => console.log(question._id)}>
-                        <QuestionTitle>
-                            { question.title }
-                        </QuestionTitle>
+          <QuestionInfoContainer>
+            <QuestionInfo>
+              <QuestionInfoTitle>Answers:</QuestionInfoTitle>
+              <QuestionInfoItem>{question.answers.length}</QuestionInfoItem>
+            </QuestionInfo>
 
-                        <QuestionInfoContainer>
-                            <QuestionInfo>
-                                <QuestionInfoTitle>
-                                    Answers:
-                                </QuestionInfoTitle>
-                                <QuestionInfoItem>
-                                    { question.answers.length }
-                                </QuestionInfoItem>
-                            </QuestionInfo>
+            <QuestionInfo>
+              <QuestionInfoTitle>Posted on:</QuestionInfoTitle>
+              <QuestionInfoItem>
+                {new Date(question.createdAt).toLocaleString()}
+              </QuestionInfoItem>
+            </QuestionInfo>
 
-                            <QuestionInfo>
-                                <QuestionInfoTitle>
-                                    Posted on:
-                                </QuestionInfoTitle>
-                                <QuestionInfoItem>
-                                    { new Date(question.createdAt).toLocaleString() }
-                                </QuestionInfoItem>
-                            </QuestionInfo>
+            <QuestionInfo>
+              <QuestionInfoTitle>Last updated on:</QuestionInfoTitle>
+              <QuestionInfoItem>
+                {new Date(question.updatedAt).toLocaleString()}
+              </QuestionInfoItem>
+            </QuestionInfo>
 
-                            <QuestionInfo>
-                                <QuestionInfoTitle>
-                                    Last updated on:
-                                </QuestionInfoTitle>
-                                <QuestionInfoItem>
-                                    { new Date(question.updatedAt).toLocaleString() }
-                                </QuestionInfoItem>
-                            </QuestionInfo>
-
-                            {
-                                withUserName
-                                    &&
-                                <QuestionInfo>
-                                    <QuestionInfoTitle>
-                                        By:
-                                    </QuestionInfoTitle>
-                                    <QuestionInfoItem>
-                                        { question.user ? question.user.username || `${question.user.firstName} ${question.user.lastName}` : 'unknown' }
-                                    </QuestionInfoItem>
-                                </QuestionInfo>
-                            }
-
-                        </QuestionInfoContainer>
-                    </Question>
-                ))
-            }
-        </QuestionContainer>
-    );
+            {withUserName && (
+              <QuestionInfo>
+                <QuestionInfoTitle>By:</QuestionInfoTitle>
+                <QuestionInfoItem>
+                  {question.user
+                    ? question.user.username ||
+                      `${question.user.firstName} ${question.user.lastName}`
+                    : 'unknown'}
+                </QuestionInfoItem>
+              </QuestionInfo>
+            )}
+          </QuestionInfoContainer>
+        </Question>
+      ))}
+    </QuestionContainer>
+  );
 };
 
 export default Questions;

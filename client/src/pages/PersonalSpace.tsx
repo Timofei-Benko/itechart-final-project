@@ -14,6 +14,9 @@ import ContentContainer from '../components/dumb/ContentContainer';
 import Spinner from '../components/dumb/Spinner';
 
 import { HEADER_HEIGHT, BOX_SHADOW } from '../components/constants';
+import { useQuery, useQueryClient } from 'react-query';
+import { LS_USER_ID } from '../common/config/constants';
+import * as apiService from '../common/apiService';
 
 const PersonalSpaceContainer = styled.div`
   position: relative;
@@ -23,9 +26,9 @@ const PersonalSpaceContainer = styled.div`
   height: 650px;
   width: 100%;
   border-radius: 15px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   box-shadow: ${BOX_SHADOW};
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 `;
 
 const PSContentContainer = styled.div`
@@ -33,45 +36,44 @@ const PSContentContainer = styled.div`
   overflow: scroll;
 `;
 
+//TODO: remove all server state logic to this page's children components
 const PersonalSpace: FunctionComponent = (): JSX.Element => {
+  const userId = localStorage.getItem(LS_USER_ID) as string;
+  const { isLoading, data: userData } = useQuery('user', () =>
+    apiService.getUser(userId)
+  );
 
-    const initUserState = useSelector((state: RootState) => state.userState);
-    const userState = useRef(initUserState);
-    userState.current = initUserState;
+  const { path } = useRouteMatch();
 
-    const { path } = useRouteMatch();
-
-    return (
-        <>
-            <Header />
-            <ContentContainer height={`calc(100% - ${HEADER_HEIGHT})`}>
-                    <PersonalSpaceContainer>
-                        {
-                            userState.current.loading
-                                ?
-                                <Spinner />
-                                :
-                                <>
-                                    <Sidebar path={path}/>
-                                    <PSContentContainer>
-                                        <Switch>
-                                            <Route exact path={`${path}/`}>
-                                                <Redirect to={`${path}/account`} />
-                                            </Route>
-                                            <Route exact path={`${path}/account`}>
-                                                <UserInformation />
-                                            </Route>
-                                            <Route exact path={`${path}/questions`}>
-                                                <Questions />
-                                            </Route>
-                                        </Switch>
-                                    </PSContentContainer>
-                                </>
-                        }
-                    </PersonalSpaceContainer>
-            </ContentContainer>
-        </>
-    )
+  return (
+    <>
+      <Header />
+      <ContentContainer height={`calc(100% - ${HEADER_HEIGHT})`}>
+        <PersonalSpaceContainer>
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <>
+              <Sidebar path={path} />
+              <PSContentContainer>
+                <Switch>
+                  <Route exact path={`${path}/`}>
+                    <Redirect to={`${path}/account`} />
+                  </Route>
+                  <Route exact path={`${path}/account`}>
+                    <UserInformation />
+                  </Route>
+                  <Route exact path={`${path}/questions`}>
+                    <Questions />
+                  </Route>
+                </Switch>
+              </PSContentContainer>
+            </>
+          )}
+        </PersonalSpaceContainer>
+      </ContentContainer>
+    </>
+  );
 };
 
 export default PersonalSpace;

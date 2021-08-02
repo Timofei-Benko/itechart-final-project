@@ -6,7 +6,7 @@ const Aside = styled.aside`
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: .5rem;
+  gap: 0.5rem;
   padding-right: 2rem;
   margin-right: 2rem;
   max-width: max-content;
@@ -18,7 +18,7 @@ const Aside = styled.aside`
     text-decoration: none;
     height: 40px;
     color: black;
-    transition: color .2s ease-in-out;
+    transition: color 0.2s ease-in-out;
     white-space: nowrap;
 
     &:visited {
@@ -28,18 +28,18 @@ const Aside = styled.aside`
     &:after {
       content: '';
       position: absolute;
-      bottom: 0;
+      bottom: 10px;
       display: block;
       height: 3px;
       width: 100%;
       background-color: #c6969f;
       transform: scale(0);
-      transition: transform .2s ease-in-out;
+      transition: transform 0.2s ease-in-out;
     }
 
     &:is(.active, :hover) {
       color: #c6969f;
-      
+
       &:after {
         transform: scale(1);
       }
@@ -47,29 +47,28 @@ const Aside = styled.aside`
   }
 `;
 
-const Sidebar =  (props): JSX.Element => {
-    const {
-        location,
-        path
-    } = props;
+const Sidebar = (props): JSX.Element => {
+  const { location, path } = props;
 
-    const isAccountTabActive = location.pathname === `${path}/account`;
-    const isQuestionsTabActive = location.pathname === `${path}/questions`;
+  const isAccountTabActive = location.pathname === `${path}/account`;
+  const isQuestionsTabActive = location.pathname === `${path}/questions`;
 
-    return (
-        <Aside>
-            <Link
-                to={`${path}/account`}
-                className={isAccountTabActive ? 'active' : ''}
-            >Account
-            </Link>
-            <Link
-                to={`${path}/questions`}
-                className={isQuestionsTabActive ? 'active' : ''}
-            >My Questions
-            </Link>
-        </Aside>
-    );
+  return (
+    <Aside>
+      <Link
+        to={`${path}/account`}
+        className={isAccountTabActive ? 'active' : ''}
+      >
+        Account
+      </Link>
+      <Link
+        to={`${path}/questions`}
+        className={isQuestionsTabActive ? 'active' : ''}
+      >
+        My Questions
+      </Link>
+    </Aside>
+  );
 };
 
 export default withRouter(Sidebar);

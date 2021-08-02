@@ -1,11 +1,16 @@
-import React, { FunctionComponent, useEffect, useRef } from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import React, { FunctionComponent, useEffect } from 'react';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import store from './redux/store';
-import useUserStore from './redux/hooks/useUserStore';
+import useAuth from './common/authentication/useAuth';
 
-import keepSignedIn from './common/authentication/keepSignedIn';
-import isSignedIn from './common/authentication/isSignedIn';
+import { SET_AUTHENTICATION_STATUS } from './redux/actions';
+import { RootState } from './common/config/interfaces';
 
 import SignUp from './pages/SignUp';
 import SignIn from './pages/SignIn';
@@ -16,51 +21,57 @@ import 'normalize.css';
 import GlobalStyle from './components/dumb/GlobalStyle';
 
 const App: FunctionComponent = (): JSX.Element => {
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        keepSignedIn();
+  const setIsSignedInStatus = async () => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const { isSignedIn } = await useAuth();
+    dispatch({
+      type: SET_AUTHENTICATION_STATUS,
+      payload: isSignedIn,
+    });
+  };
 
-        if (isSignedIn()) {
-            // eslint-disable-next-line react-hooks/rules-of-hooks
-            store.dispatch(useUserStore());
-        }
-    }, []);
+  useEffect(() => {
+    setIsSignedInStatus();
+  }, []);
 
-    return (
-        <Router>
-            <GlobalStyle/>
+  const isSignedIn = useSelector(
+    (state: RootState) => state.authenticationStatus
+  );
 
-            <Switch>
-                <Route path='/login'>
-                    <SignIn/>
-                </Route>
+  return (
+    <Router>
+      <GlobalStyle />
 
-                <Route path='/register'>
-                    <SignUp/>
-                </Route>
+      <Switch>
+        <Route path="/login">
+          <SignIn />
+        </Route>
 
-                <Route path='/home'>
-                    <Home/>
-                </Route>
-            </Switch>
+        <Route path="/register">
+          <SignUp />
+        </Route>
 
-            {
-                isSignedIn()
-                    ?
-                    <Switch>
-                        <Route exact path='/'>
-                            <Redirect to='/personal-space' />
-                        </Route>
-                        <Route path='/personal-space'>
-                            <PersonalSpace />
-                        </Route>
-                    </Switch>
-                    :
-                    <Redirect to='/login' />
-            }
+        <Route path="/home">
+          <Home />
+        </Route>
+      </Switch>
 
-        </Router>
-    );
+      {isSignedIn ? (
+        <Switch>
+          <Route exact path="/">
+            <Redirect to="/personal-space" />
+          </Route>
+          <Route path="/personal-space">
+            <PersonalSpace />
+          </Route>
+        </Switch>
+      ) : (
+        <Redirect to="/login" />
+      )}
+    </Router>
+  );
 };
 
 export default App;

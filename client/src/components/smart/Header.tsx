@@ -1,12 +1,12 @@
-import React, { FunctionComponent } from "react";
+import React, { FunctionComponent } from 'react';
 import styled from 'styled-components/macro';
 import { NavLink } from 'react-router-dom';
 
-import isSignedIn from "../../common/authentication/isSignedIn";
+import isSignedIn from '../../common/authentication/isSignedIn';
 
-import ContentContainer from "../dumb/ContentContainer";
-import ButtonLink from "../dumb/ButtonLink";
-import Title from "../dumb/Title";
+import ContentContainer from '../dumb/ContentContainer';
+import ButtonLink from '../dumb/ButtonLink';
+import Title from '../dumb/Title';
 
 import { HEADER_HEIGHT } from '../constants';
 
@@ -17,8 +17,7 @@ const Nav = styled.nav`
   width: 100%;
   height: ${HEADER_HEIGHT};
   justify-content: center;
-  background-color: #FFFFFF;
-  -webkit-box-shadow: 2px 9px 34px 0px #999999;
+  background-color: #ffffff;
   box-shadow: 2px 9px 34px 0px #999999;
 `;
 
@@ -45,34 +44,33 @@ const Logo = styled(Title)`
 `;
 
 const Header: FunctionComponent = (): JSX.Element => {
-    return (
-        <Nav>
-            <ContentContainer>
-                <NavContainer>
-                    <>
-                        <Logo>Not stack overflow</Logo>
-                    </>
-                    <>
-                        <ButtonContainer>
-                            <NavLink to={'/home'}>
-                                <ButtonLink>Questions</ButtonLink>
-                            </NavLink>
-                            {
-                                isSignedIn() ?
-                                    <NavLink to={'/personal-space'}>
-                                        <ButtonLink>Personal space</ButtonLink>
-                                    </NavLink>
-                                    :
-                                    <NavLink to={'/login'}>
-                                        <ButtonLink>Sign in</ButtonLink>
-                                    </NavLink>
-                            }
-                        </ButtonContainer>
-                    </>
-                </NavContainer>
-            </ContentContainer>
-        </Nav>
-    )
+  return (
+    <Nav>
+      <ContentContainer>
+        <NavContainer>
+          <>
+            <Logo>Not stack overflow</Logo>
+          </>
+          <>
+            <ButtonContainer>
+              <NavLink to={'/home'}>
+                <ButtonLink>Questions</ButtonLink>
+              </NavLink>
+              {isSignedIn() ? (
+                <NavLink to={'/personal-space'}>
+                  <ButtonLink>Personal space</ButtonLink>
+                </NavLink>
+              ) : (
+                <NavLink to={'/login'}>
+                  <ButtonLink>Sign in</ButtonLink>
+                </NavLink>
+              )}
+            </ButtonContainer>
+          </>
+        </NavContainer>
+      </ContentContainer>
+    </Nav>
+  );
 };
 
 export default Header;

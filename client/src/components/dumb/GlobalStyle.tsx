@@ -6,7 +6,7 @@ const GlobalStyle = createGlobalStyle`
     margin: 0;
     box-sizing: border-box;
   }
-  
+
   body, html, #root {
     height: 100%;
     background-attachment: fixed;
@@ -14,7 +14,7 @@ const GlobalStyle = createGlobalStyle`
     background-image: linear-gradient(19deg, #FAACA8 0%, #DDD6F3 100%);
     font-family: 'Roboto', sans-serif;
   }
-  
+
   a {
     text-decoration: none;
   }

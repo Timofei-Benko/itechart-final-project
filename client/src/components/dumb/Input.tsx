@@ -8,14 +8,16 @@ const Input = styled.input`
   max-width: 100%;
   padding: 11px 13px;
   background: #f9f9fa;
-  margin-bottom: ${(props: {withError?: true}) => props.withError ? 0 : '2rem'};
+  margin-bottom: ${(props: { withError?: true }) =>
+    props.withError ? 0 : '2rem'};
   outline: 0;
   border: 1px solid;
-  border-color: ${(props: {errorDisplay?: boolean}) => props.errorDisplay ? 'red' : 'rgba(201, 199, 199, 0.7)'};
+  border-color: ${(props: { errorDisplay?: boolean }) =>
+    props.errorDisplay ? 'red' : 'rgba(201, 199, 199, 0.7)'};
   font-size: 14px;
   border-radius: 5px;
-  transition: all .1s ease-in-out;
-  
+  transition: all 0.1s ease-in-out;
+
   :focus,
   :hover {
     border-color: black;

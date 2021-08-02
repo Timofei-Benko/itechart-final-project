@@ -7,7 +7,7 @@ export default styled.form`
   width: 100%;
   max-width: 500px;
   margin: 2rem;
-  background: white ;
+  background: white;
   padding: 0 3rem 1rem 3rem;
   border-radius: 4px;
   box-shadow: ${BOX_SHADOW};

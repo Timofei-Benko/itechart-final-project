@@ -4,7 +4,8 @@ import styled from 'styled-components/macro';
 export default styled.div`
   position: relative;
   height: 40px;
-  visibility: ${(props: { errorDisplay?: boolean }) => props.errorDisplay ? 'visible' : 'hidden'};
+  visibility: ${(props: { errorDisplay?: boolean }) =>
+    props.errorDisplay ? 'visible' : 'hidden'};
 
   :before {
     content: '${(props: { errorMessage?: string }) => props.errorMessage}';
@@ -12,7 +13,7 @@ export default styled.div`
     top: 5px;
     display: block;
     color: #cf6c6c;
-    font-size: .8rem;
+    font-size: 0.8rem;
     font-style: italic;
   }
 `;
