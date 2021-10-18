@@ -12,7 +12,7 @@
     "test:user": "npm run build & mocha test/suites/user.*.js --timeout 10000 --exit",
     "test:question": "npm run build & mocha test/suites/question.*.js --timeout 10000 --exit",
     "test:auth": "npm run build & mocha test/suites/auth.*.js --timeout 10000 --exit",
-    "lint": "npx eslint . --ext .ts"
+    "lint": "npx eslint  --ext .ts"
   },
   "keywords": [],
   "author": "",

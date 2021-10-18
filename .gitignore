@@ -1,6 +1,6 @@
-api_v1(rest)/node_modules
-api_v1(rest)/build
-#api_v1(rest)/.env
+server/rest/node_modules
+server/rest/build
+#rest/.env
 
 client/node_modules
 client/build
