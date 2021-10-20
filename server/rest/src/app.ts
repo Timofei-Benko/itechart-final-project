@@ -14,11 +14,11 @@ morganBody(app);
 createDBConnection();
 
 app.use('/api', (req, res, next) => {
-    if (req.originalUrl === '/api') {
-        res.send('Service is running!');
-        return;
-    }
-    next();
+  if (req.originalUrl === '/api') {
+    res.send('Service is running!');
+    return;
+  }
+  next();
 });
 
 app.use('/api', userRouter);
