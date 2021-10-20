@@ -17,6 +17,6 @@ If you wanna play around with this app, here's what you should do:
 git clone https://github.com/Timofei-Benko/itechart-final-project.git
 ```
 
-2. Proceed to instructions according to which part of the app you are interested in: 
+2. Proceed to instructions according to what part of the app you are interested in: 
 * [Server](server/rest/README.md)
 * Client (it is unfinished and sucks, I will rewrite the whole thing from scratch :hand_over_mouth:)
