@@ -1,6 +1,18 @@
+# Not StackOverflow server app
+
+---
+Hey there! As you can see there are two versions of the server app: one is RESTful, other uses GraphQL.
+
+The REST version is kinda finished. There are things that I don't like about it, but for the first back-end project 
+it's okay I guess. Unless these things are related to RESTful patterns and things like that, they won't be fixed 
+here. I'll do it the proper way in GraphQL app.  
+
+GraphQL version is under construction so stay tuned.
+
+---
+
 ### Initial set up
-Once you cloned the repo, make sure you are in the ````server````
-directory and run:
+Once you cloned the repo, make sure you are in the ````server/rest````directory and run:
 ```
 npm i
 ```
@@ -12,17 +24,17 @@ The server part of the application uses the following scripts:
 ```
 npm run dev
 ```
-2. To create server build and run it in production mode:
+2. To run the server in production mode:
 
 ```
 npm run prod
 ```
-3. To build the server:
+3. To create server build:
 
 ```
 npm run build
 ```
-4. To run ESLint (won't fix anything):
+4. To run ESLint (won't make any changes to the code):
 
 ```
 npm run lint
